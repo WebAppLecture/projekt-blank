@@ -1,17 +1,88 @@
-import { GameObject, CircleMovableObject, PictureCircleMovableObject } from "../GameObject.js";
+import { GameObject } from "../GameObject.js";
 import { GameTemplate} from "./GameTemplate.js";
+import { Player } from "./Player.js";
+import { Star } from "./DropItems.js";
+import { TreeRow, Sun, Moon } from "./Background.js";
 
 export class Starfall extends GameTemplate {
     
+    //TODO: 
+    //Improve direction change
+    //Modify levelUp stats
+    //Finetune hitbox player
+    //Add background
+    //Add boosters
+
     start() {
-        this.player = new Player(8);
+        this.baseStats();
+        this.firstLevelStats();
+        //this.initBackground();
+        this.player = new Player(this.playerSpeed);
         this.gameOver = false;
-        this.points = 0;
-        this.lives = 5;
-        this.stars = [];
-        this.starSpeed = 2;
-        this.starSpawnModifier = 0.1; //Determines how long it takes for new stones to appear (percent of screen).
     } 
+
+    //Initializes base stats (final).
+    baseStats() {
+        this.dropStarRadius = 1; //Star size when entering screen.
+        this.starIncreaseFactor = 0.06; //Percentage by which falling stars increase in size.
+        this.maxStarRadius = 15; //Final star size: when this size is reached they can be caught by the firefly.
+        this.baseStarSpeed = 1.5;
+        this.starSpawnModifier = 0.15;
+        //this.starDriftFactor = 0; 
+        this.basePlayerSpeed = 6; 
+        this.basePointsNeeded = 10; //Points needed per level.
+        this.baseLostPenalty = 0.5; //Percentage point deduction for lost stars.
+    }
+
+    //Set stats for first level.
+    firstLevelStats() {
+        this.level = 1;
+        this.caught = 0;
+        this.lost = 0;
+        this.lostPenalty = this.baseLostPenalty;
+        this.points = 0;
+        this.pointsNeeded = this.basePointsNeeded * this.level;
+        this.playerSpeed = this.basePlayerSpeed;
+        this.starSpeed = this.baseStarSpeed;
+        this.reset();
+    }
+
+    //Reset current game progress.
+    reset() {
+        this.stars = [];
+        this.lost = 0;
+        this.caught = 0;
+    }
+
+    //Modifies stats for next difficulty level.
+    levelUp() {
+        this.reset();
+        this.level++;
+        this.playerSpeed *= 1.1;
+        this.starSpeed += 0.5;
+        this.pointsNeeded += this.basePointsNeeded;
+        //evtl modify starspawnmodifier/starspeed/lostPenalty
+    }
+
+    //Initializes background variables.
+    initBackground() {
+        this.trees = [];
+        this.treeSpeed = 1;
+        this.createTrees(5);
+        this.moon = new Moon(1);
+        this.sun = new Sun();
+    }
+
+    //Initializes forest background by creating a given number of trees.
+    createTrees(number) {
+        let positionStart = 300;
+        let positionCurrent = positionStart;
+        for(let i = 0; i < number; i++) {
+            this.trees.push(new TreeRow(positionCurrent, this.treeSpeed))
+            console.log(this.trees.length);
+            positionCurrent += positionStart * 0.1;
+        }
+    }
 
     bindControls() {
         this.inputBinding = {
@@ -23,37 +94,55 @@ export class Starfall extends GameTemplate {
     }
 
     update(ctx) {
+        this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
+        if(this.points === this.pointsNeeded) {
+            this.levelUp();
+        }
+        if(this.points < 0) {
+            this.gameOver = true; 
+        }
         this.player.update(ctx);
         this.dropStar(ctx);
         this.checkStars(ctx);
         this.gameOverMessage();
     }
 
-    draw(ctx) {
-        this.player.draw(ctx);
-        this.displayLives(ctx);
-        for(let i = 0; i < this.stars.length; i++) {
-            this.stars[i].draw(ctx);
-        }  
-    }
-
-    displayLives(ctx) {
-        ctx.fillStyle = "#AEEDBD";
-        ctx.font = "40px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(this.lives, this.player.x + this.player.radius/2, this.player.y + this.player.radius);
-    }
-
+    //Drops new stars from the sky.
     dropStar(ctx) {
-        // Add new stone when 
-        // 1) there is no stone yet 
-        // 2) the last added stone has passed a certain percentage of the screen.
+        // Add new star when 
+        // 1) there is no star yet 
+        // 2) the last added star has passed a certain percentage of the screen.
         if(this.stars.length == 0 || this.stars[this.stars.length - 1].y >= ctx.canvas.height * this.starSpawnModifier) { 
-            let positionStone;
+            let positionStar;
             do {
-                positionStone = Math.random() * ctx.canvas.width;
-            } while(positionStone < 50 || positionStone > ctx.canvas.width - 100); //Ensure stone fully shown in screen (stone width = 50))
-            this.stars.push(new Star(positionStone, this.starSpeed));
+                positionStar = Math.random() * ctx.canvas.width;
+            } while(positionStar < ctx.canvas.width/4 || positionStar > ctx.canvas.width - ctx.canvas.width/4);
+            this.stars.push(new Star(positionStar, this.dropStarRadius, this.starSpeed));
+        }
+    }
+
+    checkStars(ctx) {
+        for(let i = this.stars.length - 1; i >= 0; i--) {
+            this.stars[i].update(ctx);
+
+            if(this.stars[i].radius < this.maxStarRadius) {
+                this.stars[i].radius += this.starSpeed * this.starIncreaseFactor;
+            }
+
+            //Border
+            //Count and delete lost stars.
+            if(this.stars[i].starBorderPassed(ctx)) {
+                this.lost++;
+                this.deleteStar(i);
+            }
+
+            if(this.stars[i].radius >= this.maxStarRadius) {
+                //Count and delete caught stars.
+                if(GameObject.circleCollision(this.player, this.stars[i])) {
+                    this.caught++;
+                    this.deleteStar(i);   
+                }                 
+                }
         }
     }
 
@@ -61,125 +150,82 @@ export class Starfall extends GameTemplate {
         this.stars.splice(index, 1);
     }
 
-    checkStars(ctx) {
-        for(let i = this.stars.length - 1; i >= 0; i--) {
-            this.stars[i].update(ctx);
-
-            //Border
-            //Inactive stones get deleted when out of screen.
-            if(this.stars[i].starBorderPassed(ctx)) {
-                this.deleteStar(i);
-            }
-
-            //Catch
-            if(GameObject.circleCollision(this.player, this.stars[i])) {
-                this.points += 1;
-                this.deleteStar(i);                    
-            }
-        }
-    }
-
     gameOverMessage() {
         if(this.gameOver === true) {
-            if(this.lives * 1 === 0) {
+            if(this.points < 0) {
                 this.gameOverText = ["GAME OVER"];
             } 
             else {
                 this.gameOverText = ["EXITED GAME"];
             }
-            this.gameOverText.push("\n", "Score: " + this.points, "\n", "\n", "New Game: E")
+            this.gameOverText.push("\n", "Level: " + this.level, "\n", "\n", "New Game: E")
+        }
+    }
+
+    draw(ctx) {
+        this.drawHorizonGradient(ctx);
+        //this.moon.draw(ctx);
+        //this.sun.draw(ctx);
+        //this.drawTreeLine(ctx);
+        this.drawLevelAndPoints(ctx);
+        this.drawStars(ctx);
+        this.player.draw(ctx);
+    }
+
+    drawHorizonGradient(ctx) {
+        let gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height); 
+        gradient.addColorStop(0, "#040120");
+        gradient.addColorStop(.1, "#06012a");
+        gradient.addColorStop(.3, "#1d1847");
+        gradient.addColorStop(.7, "#241c6a");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+
+    //PLACEHOLDER
+    drawTreeLine(ctx) {
+        let img = document.createElement("img");
+        img.src = "src/images/trees-placeholder.png";
+        ctx.drawImage(img, 0, ctx.canvas.height * 0.75, ctx.canvas.width, ctx.canvas.height * 0.5);
+    }
+
+    drawStars(ctx) {
+        for(let i = 0; i < this.stars.length; i++) {
+            //Catchable stars start to shine:
+            if(this.stars[i].radius >= this.maxStarRadius) {
+                ctx.fillStyle = "#fac95e";
+                ctx.filter = "blur(10px)";
+                ctx.beginPath();
+                ctx.arc( this.stars[i].x, this.stars[i].y, this.stars[i].radius, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.fill();
+                ctx.filter ="none";
+            }
+            this.stars[i].draw(ctx);
+        }  
+    }
+
+    drawLevelAndPoints(ctx) {
+        let fontSize = 30;
+        ctx.fillStyle = this.fillStyle;
+        ctx.font = fontSize + "px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseLine = "middle";
+        let text = ["Points: " + Math.ceil(this.points), "", " Level: " + this.level];
+
+        for(let  i = 0; i < text.length; i++) {
+            let startY = text.length/2 + fontSize * 2;
+            ctx.fillText(text[i], ctx.canvas.width * 0.90, startY + i * fontSize);
+        }
+    }
+
+    drawBackground(ctx) {
+        for(let i = 0; i < this.trees.length; i++) {
+            this.trees[i].draw(ctx);
         }
     }
 
     static get NAME() {
-        return "Start game";
+        return "Start Game: E";
     }
 }
-
-export class SpriteMovableObject extends CircleMovableObject {
-
-    constructor(x, y, vx, vy, radius, imgPath) {
-        super(x, y, "red", vx, vy, radius);
-        this.img = document.createElement("img");
-        this.img.src = imgPath;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill(); 
-        ctx.drawImage(this.img, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
-
-    }
-}
-
-export class Player extends SpriteMovableObject {
-   
-    constructor(speed) {
-        super(100, 100, 0, 0, 30, "src/images/firefly-placeholder.png");
-        this.speed = speed;
-    }
-
-    up(bool) {    
-        this.vy = bool * -this.speed; 
-    }
-
-    down(bool) {
-        this.vy = bool * this.speed;
-    }
-
-    left(bool) {    
-        this.vx = bool * -this.speed; 
-    }
-
-    right(bool) {
-        this.vx = bool * this.speed;
-    }
-
-    update(ctx) {
-
-        if(this.vy === 0 && this.vx === 0) {
-            return;
-        }
-        if(this.y < 0) { //Top
-            this.y = 0;
-        } 
-        if(this.y + this.height > ctx.canvas.height) { //Bottom
-            this.y = ctx.canvas.height - this.height;
-        }
-        if(this.x < 0) { //Left
-            this.x = 0;
-        } 
-        if(this.x + this.width > ctx.canvas.width) { //Right
-            this.x = ctx.canvas.width - this.width;
-        }
-        super.update();
-    }
-}
-
-export class Star extends CircleMovableObject {
-    
-    constructor(x, starSpeed) {
-        let direction;
-        if(Math.random() <= 0.5) direction = 1;
-        else direction = -1;
-        super(x, -20, "#6bd26b", Math.random() * starSpeed/2 * direction, starSpeed, 20);
-    }
-
-    //Star has fully passed border (used for deleting stars).
-    starBorderPassed(ctx) {
-        return this.y > ctx.canvas.height;
-    }
-}
-
-/*
-export class TreeRow extends GameObject {
-    constructor(x, y, width, height, imageSource) {
-        super(x, y, window, height, "transparent");
-        this.image = new Image();
-        this.image.src = "./idea.jpeg";
-    }
-}
-*/

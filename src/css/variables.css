@@ -1,7 +1,29 @@
 :root {
     /*Border*/
-    --glowBase: #fac95e;
+    --glowDark: #533c0a;
+    --glowBase: #906813;
+    --glowMid: #bb8d2a;
+    --glowBright: #fac95e;
+    --glowMax: #ece1c8;
 
-    /*Game*/
-    --nightDark: #130e3b;
+
+    /*Screen*/
+    --blueDarkest: #040120;
+    --blueDarker: #06012a;
+    --blueDark: #1d1847;
+    --blueMidDark: #241c6a;
+    --blueMid: #4012a2;
+    --blueBright: #a3a3ff;
+
+    /*Horizon*/
+    --brightOrange: #ec966c;
+    --orange: #f2671f;
+    
+    --red: #c91b26;
+    --lightShadowRed: #5e0b10;
+    --shadowRed: #4e080d;
+    
+    --violet: #560c86;
+    
+    --azure: #7fbbd3;
 }

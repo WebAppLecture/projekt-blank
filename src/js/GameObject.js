@@ -87,16 +87,41 @@ export class CircleMovableObject extends MovableGameObject {
     }
 }
 
-export class PictureCircleMovableObject extends CircleMovableObject {
-    constructor(x, y, color, vx, vy, radius, imageSource) {
-        super(x, y, color, radius, vx, vy, radius);
-        this.image = new Image();
-        this.image.src = imageSource;
+export class SpriteMovableObject extends CircleMovableObject {
+
+    constructor(x, y, vx, vy, radius, imgPath) {
+        super(x, y, "white", vx, vy, radius);
+        this.img = document.createElement("img");
+        this.img.src = imgPath;
     }
 
     draw(ctx) {
-        this.image.onload = () => {
-            ctx.drawImage(this.image, 0, 0);
-        }
+        
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
+    }
+}
+
+export class MovingBackgroundObject extends MovableGameObject {
+
+    constructor(x, y, width, height, vx, vy, imgPath) {
+        super(x, y, "red", width, height, vx, vy);
+        this.img = document.createElement("img");
+        this.img.src = imgPath;
+    }
+
+    draw(ctx) {
+
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill();
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 }

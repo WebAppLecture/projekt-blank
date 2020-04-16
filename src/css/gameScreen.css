@@ -5,7 +5,7 @@
 
 body {
     user-select: none;
-    background: black;
+    background: var(--blueDarker);
 }
 
 .centered {
@@ -29,7 +29,8 @@ body {
     font-size: 5vh;
     text-align: center;
     line-height: 12vh;
-    color: goldenrod;
+    color: var(--glowBright);
+    text-shadow: .05vh .05vh 1vh var(--glowMid);
 }
 
 .outerBox { /*Border around game window, planned: fills up with light when stars collected => displays progress*/
@@ -44,6 +45,15 @@ body {
     justify-content: center;
 
     background: var(--glowBase);
+    box-shadow: 
+                0 0 .7vh .1vh inset var(--glowMax),
+                0 0 .7vh .1vh var(--glowMax),
+
+                0 0 1vh .4vh inset var(--glowBright),
+                0 0 1vh 1vh var(--glowBright),
+
+                0 0 1vh .7vh inset var(--glowMid),
+                0 0 1.5vh 1.6vh var(--glowMid)      
 }
 
 .innerBox { /*Inner border, same size as screen, used for shadows*/
@@ -54,21 +64,10 @@ body {
     position: absolute;
     padding: 1vh;
 
-    background: var(--nightDark);
+    background: green;
+
+    box-shadow: 0 0 .5vh .3vh var(--glowDark)
 }
-
-/*
-.progressBox { //Black square over gold border, moved up/down according to points collected.
-    width: 114vh;
-    height: 74vh; 
-
-    margin: -10vh 0 0 0;
-    position: absolute;
-    padding: 1vh;
-
-    background: black;
-}
-*/
 
 .screen { /*Game*/
     width: 110vh;
@@ -76,9 +75,22 @@ body {
 
     margin: 2vh 0 0 2vh;
     position: absolute;
+
+    background: var(--blueDark);
+    box-shadow: 0 0 3vh .3vh inset var(--blueDarker),
+                0 0 1vh .1vh var(--blueDarker);
+}
+
+.progressBox {
+    width: 200vh;
+    height: 100vh; 
+
+    margin: -110vh 0vh 0 -70vh; /*adjust first margin value to display/hide gold border*/
+    position: absolute;
     padding: 1vh;
 
-    background: var(--nightDark);
+    background: var(--blueDarker);
+    box-shadow: 0 0 .5vh .5vh var(--blueDarker);
 }
 
 .menu {
@@ -94,22 +106,27 @@ body {
 }
 
 .menu > ul {
-    padding-inline-start: 1vh;
-    padding-inline-end: 1vh;
+    padding-inline-start: 2vh;
+    padding-inline-end: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
 
     font-size: 5vh;
     font-weight: lighter;
     font-family: 'Times New Roman', Times, serif;
     white-space: nowrap;
     color: white;
+    text-shadow: .05vh .05vh .6vh var(--azure);
     
-    margin: 30vh 45vh;
+    margin: 25vh 41vh;
 
-    border: .3vh solid white;
+    /*border: .3vh solid var(--glowBright);*/
+    box-shadow: 0 0 1vh .2vh var(--azure),
+                0 0 .5vh .1vh inset white;
 }
 
 .menu > ul.active {
-    border-color: rgb(0, 255, 255);
+    border-color: var(--azure);
     border-radius: 1vh;
 }
 
