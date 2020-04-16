@@ -1,0 +1,26 @@
+.controls > * {
+    position: absolute;
+    cursor: pointer;
+    color: transparent;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: lighter;
+}
+
+/*
+
+#music {
+    width: 6vh;
+    height: 6vh;
+
+    top: 3.5vh;
+    left: 107vh;
+
+    overflow: hidden;
+
+    border: thin;
+    border-style: solid;
+    border-radius: 100%;
+    border-color: white;
+}
+*/

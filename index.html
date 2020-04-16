@@ -1,8 +1,29 @@
 <html>
     <head>
-        <link rel="stylesheet" href="src/css/main.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" href="./src/css/main.css"/>
     </head>
     <body>
+        <div class="centered game">
+            <div class="gameName">Starfall</div>
+            <div class="outerBox"></div>
+                <div class="innerBox"></div>
+                <div class="progressBox"></div>
+                <canvas class="screen" height="700" width ="1100"></canvas>
+                <nav class="menu">
+                </nav>
+                <nav class="controls">
+                    <div class="reset" id="reset">Menu</div>
+                    <div class="confirm" id="confirm">E</div>
+                    <div class="exit" id="reset">Q</div>
+                    <img id="music" class="music">M</div>
+                    <div id="up" class="directions up">^</div>
+                    <div id="right" class="directions right">^</div>
+                    <div id="down" class="directions down">^</div>
+                    <div id="left" class="directions left">^</div>
+                </nav>
+            </div> 
+        </div>
     </body>
     <script type="module" src="src/js/index.js"></script>
 </html>

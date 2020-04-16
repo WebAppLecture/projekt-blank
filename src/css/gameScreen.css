@@ -1,0 +1,115 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    user-select: none;
+    background: black;
+}
+
+.centered {
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.game {
+    position: relative;
+    width: 114vh; 
+    height: 85vh;
+    background: transparent;
+}
+
+.gameName { /*Game name: Starfall*/
+    width: 100%;
+    height: 11vh;
+    font-size: 5vh;
+    text-align: center;
+    line-height: 12vh;
+    color: goldenrod;
+}
+
+.outerBox { /*Border around game window, planned: fills up with light when stars collected => displays progress*/
+    width: 114vh;
+    height: 74vh; 
+
+    margin: 0 0 0 0;
+    position: absolute;
+    padding: 1vh;
+
+    align-items: center;
+    justify-content: center;
+
+    background: var(--glowBase);
+}
+
+.innerBox { /*Inner border, same size as screen, used for shadows*/
+    width: 110vh;
+    height: 70vh; 
+
+    margin: 2vh 0 0 2vh;
+    position: absolute;
+    padding: 1vh;
+
+    background: var(--nightDark);
+}
+
+/*
+.progressBox { //Black square over gold border, moved up/down according to points collected.
+    width: 114vh;
+    height: 74vh; 
+
+    margin: -10vh 0 0 0;
+    position: absolute;
+    padding: 1vh;
+
+    background: black;
+}
+*/
+
+.screen { /*Game*/
+    width: 110vh;
+    height: 70vh; 
+
+    margin: 2vh 0 0 2vh;
+    position: absolute;
+    padding: 1vh;
+
+    background: var(--nightDark);
+}
+
+.menu {
+    width: fit-content;
+    height: fit-content;
+    max-height: 60vh;
+
+    position: absolute;
+    text-align: center;
+
+    background: transparent;
+    overflow-y: hidden;
+}
+
+.menu > ul {
+    padding-inline-start: 1vh;
+    padding-inline-end: 1vh;
+
+    font-size: 5vh;
+    font-weight: lighter;
+    font-family: 'Times New Roman', Times, serif;
+    white-space: nowrap;
+    color: white;
+    
+    margin: 30vh 45vh;
+
+    border: .3vh solid white;
+}
+
+.menu > ul.active {
+    border-color: rgb(0, 255, 255);
+    border-radius: 1vh;
+}
+
