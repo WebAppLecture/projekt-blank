@@ -96,13 +96,30 @@ export class Starfall extends GameTemplate {
     }
 }
 
-export class Player extends CircleMovableObject {
+export class SpriteMovableObject extends CircleMovableObject {
+
+    constructor(x, y, vx, vy, radius, imgPath) {
+        super(x, y, "red", vx, vy, radius);
+        this.img = document.createElement("img");
+        this.img.src = imgPath;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.fill(); 
+        ctx.drawImage(this.img, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+
+    }
+}
+
+export class Player extends SpriteMovableObject {
    
     constructor(speed) {
-        super(100, 100, "white", 0, 0, 30);
+        super(100, 100, 0, 0, 30, "src/images/firefly-placeholder.png");
         this.speed = speed;
-        //this.image = new Image();
-        //this.image.src = "../../../images/firefly-placeholder.png";
     }
 
     up(bool) {    
@@ -120,12 +137,6 @@ export class Player extends CircleMovableObject {
     right(bool) {
         this.vx = bool * this.speed;
     }
-
-    /*
-    draw(ctx) {
-        ctx.drawImage(this.image, this.x, this.y);
-    }
-    */
 
     update(ctx) {
 
