@@ -16,7 +16,7 @@ export class Starfall extends GameTemplate {
     start() {
         this.baseStats();
         this.firstLevelStats();
-        //this.initBackground();
+        this.initBackground();
         this.player = new Player(this.playerSpeed);
         this.gameOver = false;
     } 
@@ -37,11 +37,7 @@ export class Starfall extends GameTemplate {
     //Set stats for first level.
     firstLevelStats() {
         this.level = 1;
-        this.caught = 0;
-        this.lost = 0;
         this.lostPenalty = this.baseLostPenalty;
-        this.points = 0;
-        this.pointsNeeded = this.basePointsNeeded * this.level;
         this.playerSpeed = this.basePlayerSpeed;
         this.starSpeed = this.baseStarSpeed;
         this.reset();
@@ -52,36 +48,50 @@ export class Starfall extends GameTemplate {
         this.stars = [];
         this.lost = 0;
         this.caught = 0;
+        this.points = 0;
+        this.pointsNeeded = this.basePointsNeeded * this.level;
     }
 
     //Modifies stats for next difficulty level.
     levelUp() {
-        this.reset();
         this.level++;
         this.playerSpeed *= 1.1;
         this.starSpeed += 0.5;
-        this.pointsNeeded += this.basePointsNeeded;
+        this.reset();
         //evtl modify starspawnmodifier/starspeed/lostPenalty
     }
 
     //Initializes background variables.
     initBackground() {
         this.trees = [];
-        this.treeSpeed = 1;
-        this.createTrees(5);
+        this.treeSpeed = 0.5;
+        this.numberOfTreeRows = 5;
+        this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
+        this.initTrees(this.numberOfTreeRows);
         this.moon = new Moon(1);
         this.sun = new Sun();
     }
 
     //Initializes forest background by creating a given number of trees.
-    createTrees(number) {
-        let positionStart = 300;
+    initTrees(number) {
+        let positionStart = 200;
+        let distance = 100; //Distance to next tree row.
         let positionCurrent = positionStart;
-        for(let i = 0; i < number; i++) {
-            this.trees.push(new TreeRow(positionCurrent, this.treeSpeed))
-            console.log(this.trees.length);
-            positionCurrent += positionStart * 0.1;
+        for(let i = this.trees.length; i < number; i++) {
+            let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
+            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber));
+            this.treeCounter++;
+            //console.log(this.trees.length);
+            positionCurrent += distance;
         }
+    }
+
+    //Adds a new tree row.
+    newTree() {
+        let position = 200;
+        let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
+        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber));
+        this.treeCounter++;
     }
 
     bindControls() {
@@ -103,8 +113,24 @@ export class Starfall extends GameTemplate {
         }
         this.player.update(ctx);
         this.dropStar(ctx);
-        this.checkStars(ctx);
+        this.updateStars(ctx);
         this.gameOverMessage();
+        this.updateTrees(ctx);
+    }
+
+    updateTrees(ctx) {
+        for(let i = this.trees.length - 1; i >= 0; i--) {
+            this.trees[i].update(ctx, i, this.playerSpeed);
+
+            if(this.trees[i].treeBorderPassed(ctx)) {
+                this.trees.splice(i, 1);
+                //console.log(i);
+            }    
+        }
+
+        if(this.trees.length < this.numberOfTreeRows) {
+            this.newTree();
+        }
     }
 
     //Drops new stars from the sky.
@@ -121,7 +147,7 @@ export class Starfall extends GameTemplate {
         }
     }
 
-    checkStars(ctx) {
+    updateStars(ctx) {
         for(let i = this.stars.length - 1; i >= 0; i--) {
             this.stars[i].update(ctx);
 
@@ -164,9 +190,9 @@ export class Starfall extends GameTemplate {
 
     draw(ctx) {
         this.drawHorizonGradient(ctx);
-        //this.moon.draw(ctx);
-        //this.sun.draw(ctx);
-        //this.drawTreeLine(ctx);
+        this.moon.draw(ctx);
+        this.sun.draw(ctx);
+        this.drawTrees(ctx);
         this.drawLevelAndPoints(ctx);
         this.drawStars(ctx);
         this.player.draw(ctx);
@@ -182,11 +208,10 @@ export class Starfall extends GameTemplate {
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
 
-    //PLACEHOLDER
-    drawTreeLine(ctx) {
-        let img = document.createElement("img");
-        img.src = "src/images/trees-placeholder.png";
-        ctx.drawImage(img, 0, ctx.canvas.height * 0.75, ctx.canvas.width, ctx.canvas.height * 0.5);
+    drawTrees(ctx) {
+        for(let i = 0; i < this.trees.length; i++) {
+            this.trees[i].draw(ctx);
+        }
     }
 
     drawStars(ctx) {
@@ -211,17 +236,11 @@ export class Starfall extends GameTemplate {
         ctx.font = fontSize + "px monospace";
         ctx.textAlign = "center";
         ctx.textBaseLine = "middle";
-        let text = ["Points: " + Math.ceil(this.points), "", " Level: " + this.level];
+        let text = ["Points: " + this.points, "", " Level: " + this.level]; //round ceil/floor or count lost stars and deduct full points
 
         for(let  i = 0; i < text.length; i++) {
             let startY = text.length/2 + fontSize * 2;
             ctx.fillText(text[i], ctx.canvas.width * 0.90, startY + i * fontSize);
-        }
-    }
-
-    drawBackground(ctx) {
-        for(let i = 0; i < this.trees.length; i++) {
-            this.trees[i].draw(ctx);
         }
     }
 

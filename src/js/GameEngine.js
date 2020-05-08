@@ -1,8 +1,11 @@
 import { Inputs } from "./Inputs.js";
 import { Menu } from "./Menu.js";
 import { Starfall } from "./game/Starfall.js";
+import { Player } from "./game/Player.js";
 
 export class GameEngine {
+
+    repeatKeys = {};
 
     constructor(controls, screen, menu) {
         this.controls = controls;
@@ -15,7 +18,7 @@ export class GameEngine {
     }
 
     loadGame(game, mode) {
-        if(game) {
+        if (game) {
             this.game = new game(mode);
             this.gameLoop();
         }
@@ -32,7 +35,7 @@ export class GameEngine {
         let name = this.menu.activeItem.innerText,
             game = GameEngine.getGameByName(name),
             modes = game.MODES;
-        if(modes.length === 0 ) {
+        if (modes.length === 0) {
             this.menu.hide();
             this.loadGame(game);
         } else {
@@ -46,7 +49,7 @@ export class GameEngine {
 
     reset() {
         delete this.game;
-        this.renderContext.clearRect(0,0,this.screen.width, this.screen.height);
+        this.renderContext.clearRect(0, 0, this.screen.width, this.screen.height);
         this.showGameSelect();
     }
 
@@ -85,41 +88,48 @@ export class GameEngine {
         this.screen.classList.add("on");
     }
 
-    gameLoop() {  
-        if(this.game !== undefined) {
-            requestAnimationFrame(this.gameLoop.bind(this));  
-            this.renderContext.clearRect(0,0,this.screen.width, this.screen.height);
+    gameLoop() {
+        if (this.game !== undefined) {
+            requestAnimationFrame(this.gameLoop.bind(this));
+            this.renderContext.clearRect(0, 0, this.screen.width, this.screen.height);
             this.game.tick(this.renderContext);
         }
     }
 
     onKeyDown(event) {
-        if(event.repeat) { return; }
-        this.input(this.keyMapping[event.which], true)
+        if(event.repeat) return;
+        let key = event.which;
+        this.input(this.keyMapping[key], true);
     }
 
+
     onKeyUp(event) {
-        this.input(this.keyMapping[event.which], false);
+        let key = event.which;
+        this.input(this.keyMapping[key], false); 
     }
 
     onControlMouseDown(event) {
-        this.input(event.target.id, true);      
+        this.input(event.target.id, true);
     }
 
     onControlMouseUp(event) {
-        this.input(event.target.id, false);      
+        this.input(event.target.id, false);
     }
 
     input(type, active) {
-        if(this.game !== undefined) {
-            if(type === "reset") {
+        if (this.game !== undefined) {
+            if (type === "reset") {
                 this.reset();
             } else {
-                this.game.input(type, active); 
-            }   
-        } else if(active && this.menuInteraction.hasOwnProperty(type)) {
+                this.game.input(type, active);
+            }
+        } else if (active && this.menuInteraction.hasOwnProperty(type)) {
             this.menuInteraction[type]();
         }
+    }
+
+    repeatKeys() {
+
     }
 
     get menuInteraction() {
@@ -136,9 +146,9 @@ export class GameEngine {
     }
 
     static getGameByName(name) {
-        for(let i = GameEngine.availableGames.length; i--; ) {
+        for (let i = GameEngine.availableGames.length; i--;) {
             let game = GameEngine.availableGames[i];
-            if(game.NAME.toLowerCase() === name.toLowerCase()) {
+            if (game.NAME.toLowerCase() === name.toLowerCase()) {
                 return game;
             }
         }
@@ -146,9 +156,9 @@ export class GameEngine {
     }
 
     static getModeByName(game, modeName) {
-        for(let i = game.MODES.length; i--; ) {
+        for (let i = game.MODES.length; i--;) {
             let mode = game.MODES[i];
-            if(mode.NAME.toLowerCase() === modeName.toLowerCase()) {
+            if (mode.NAME.toLowerCase() === modeName.toLowerCase()) {
                 return mode;
             }
         }
