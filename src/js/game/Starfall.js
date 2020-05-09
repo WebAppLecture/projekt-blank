@@ -143,7 +143,7 @@ export class Starfall extends GameTemplate {
             do {
                 positionStar = Math.random() * ctx.canvas.width;
             } while(positionStar < ctx.canvas.width/4 || positionStar > ctx.canvas.width - ctx.canvas.width/4);
-            this.stars.push(new Star(positionStar, this.dropStarRadius, this.starSpeed));
+            this.stars.push(new Star(positionStar, 0, this.dropStarRadius, this.starSpeed));
         }
     }
 
