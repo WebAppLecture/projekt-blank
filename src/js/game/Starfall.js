@@ -61,13 +61,15 @@ export class Starfall extends GameTemplate {
 
     //Initializes background variables.
     initBackground() {
+        this.updateCounter = 0;
+        this.sunMoonSpeed = 0.1;
         this.trees = [];
         this.treeSpeed = 0.5;
         this.numberOfTreeRows = 5;
         this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
         this.initTrees(this.numberOfTreeRows);
-        this.moon = new Moon(1);
-        this.sun = new Sun(1);
+        this.moon = new Moon();
+        this.sun = new Sun();
     }
 
     //Initializes forest background by creating a given number of trees.
@@ -112,6 +114,8 @@ export class Starfall extends GameTemplate {
         this.dropStar(ctx);
         this.updateStars(ctx);
         this.gameOverMessage();
+        this.moon.update(ctx);
+        this.updateCounter++;
         this.updateTrees(ctx);
         if(this.points === this.pointsNeeded) {
             this.levelUp();

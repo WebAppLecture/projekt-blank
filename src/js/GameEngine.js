@@ -5,8 +5,6 @@ import { Player } from "./game/Player.js";
 
 export class GameEngine {
 
-    repeatKeys = {};
-
     constructor(controls, screen, menu) {
         this.controls = controls;
         this.screen = screen;
@@ -126,10 +124,6 @@ export class GameEngine {
         } else if (active && this.menuInteraction.hasOwnProperty(type)) {
             this.menuInteraction[type]();
         }
-    }
-
-    repeatKeys() {
-
     }
 
     get menuInteraction() {

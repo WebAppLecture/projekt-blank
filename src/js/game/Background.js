@@ -38,7 +38,7 @@ export class TreeRow extends MovingBackgroundObject {
     draw(ctx, lastRow) {
         if(lastRow) {
             ctx.save();
-            ctx.globalAlpha = this.transparency; //TODO!
+            ctx.globalAlpha = this.transparency; //TODO doesnt work
             ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
             ctx.restore();
         }
@@ -48,22 +48,23 @@ export class TreeRow extends MovingBackgroundObject {
 
 
 export class Moon extends SpriteMovableObject {
-    constructor(speed) {
+    constructor() {
         super(50, 180, 0, 0, 200, "src/images/moon-placeholder.png");
-        this.speed = speed;
+        this.angle = 0;
     }
 
+    //https://stackoverflow.com/questions/17384663/canvas-move-object-in-circle
     update(ctx) {
-        let angle = Math.acos(1 - (ctx.height / ctx.width * 4) ^ 2 / 2);
-        let radius = ctx.width / 4;
-        this.vx = radius * Math.sin(angle);
-        this.vy = radius * Math.cos(angle);
-        super.update();
+        let radius = 17;
+        this.angle += Math.acos(1 - Math.pow(1 / radius, 2) / 2); // TODO slow down
+        this.x += radius * Math.cos(this.angle); 
+        this.y += radius * Math.sin(this.angle);
+        super.update(ctx);
     }
 
     draw(ctx) {
         ctx.save();
-        ctx.rotate(Math.PI/-180 * 20);
+        ctx.rotate( - Math.PI/180 * 20);
         ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
         ctx.restore();
      }
@@ -71,9 +72,8 @@ export class Moon extends SpriteMovableObject {
 }
 
 export class Sun extends SpriteMovableObject {
-    constructor(speed) {
+    constructor() {
         super(800, 140, 0, 0, 250, "src/images/sun-placeholder.png");
-        this.speed = speed;
     }
 
     draw(ctx) {
