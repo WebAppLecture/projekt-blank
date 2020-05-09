@@ -96,7 +96,6 @@ export class SpriteMovableObject extends CircleMovableObject {
     }
 
     draw(ctx) {
-        
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
@@ -116,12 +115,13 @@ export class MovingBackgroundObject extends MovableGameObject {
     }
 
     draw(ctx) {
-
+        /*
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.fill();
+        */
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 }

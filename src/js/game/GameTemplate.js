@@ -54,6 +54,7 @@ export class GameTemplate {
         if(type === "exit") {
             this.gameOverMessage();
             this.gameOver = true;
+            this.voluntaryExit = true;
         }
         if(this.gameOver && type === "confirm") {
             this.start();   

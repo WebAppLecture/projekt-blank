@@ -12,6 +12,7 @@ export class Starfall extends GameTemplate {
     //Finetune hitbox player
     //Add background
     //Add boosters
+    //Reduce number of variables!
 
     start() {
         this.baseStats();
@@ -19,17 +20,14 @@ export class Starfall extends GameTemplate {
         this.initBackground();
         this.player = new Player(this.playerSpeed);
         this.gameOver = false;
+        this.voluntaryExit = false;
     } 
 
     //Initializes base stats (final).
     baseStats() {
-        this.dropStarRadius = 1; //Star size when entering screen.
-        this.starIncreaseFactor = 0.06; //Percentage by which falling stars increase in size.
-        this.maxStarRadius = 15; //Final star size: when this size is reached they can be caught by the firefly.
-        this.baseStarSpeed = 1.5;
+        this.baseSpeed = 6; 
         this.starSpawnModifier = 0.15;
         //this.starDriftFactor = 0; 
-        this.basePlayerSpeed = 6; 
         this.basePointsNeeded = 10; //Points needed per level.
         this.baseLostPenalty = 0.5; //Percentage point deduction for lost stars.
     }
@@ -38,8 +36,8 @@ export class Starfall extends GameTemplate {
     firstLevelStats() {
         this.level = 1;
         this.lostPenalty = this.baseLostPenalty;
-        this.playerSpeed = this.basePlayerSpeed;
-        this.starSpeed = this.baseStarSpeed;
+        this.playerSpeed = this.baseSpeed;
+        this.starSpeed = this.baseSpeed / 4;
         this.reset();
     }
 
@@ -69,28 +67,30 @@ export class Starfall extends GameTemplate {
         this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
         this.initTrees(this.numberOfTreeRows);
         this.moon = new Moon(1);
-        this.sun = new Sun();
+        this.sun = new Sun(1);
     }
 
     //Initializes forest background by creating a given number of trees.
     initTrees(number) {
         let positionStart = 200;
+        //Front rows:
         let distance = 100; //Distance to next tree row.
         let positionCurrent = positionStart;
         for(let i = this.trees.length; i < number; i++) {
             let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
-            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber));
+            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false));
             this.treeCounter++;
-            //console.log(this.trees.length);
             positionCurrent += distance;
         }
+        //Transparent back row:
+        //this.newTree();
     }
 
     //Adds a new tree row.
     newTree() {
         let position = 200;
         let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
-        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber));
+        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber, true));
         this.treeCounter++;
     }
 
@@ -105,9 +105,6 @@ export class Starfall extends GameTemplate {
 
     update(ctx) {
         this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
-        if(this.points === this.pointsNeeded) {
-            this.levelUp();
-        }
         if(this.points < 0) {
             this.gameOver = true; 
         }
@@ -116,6 +113,9 @@ export class Starfall extends GameTemplate {
         this.updateStars(ctx);
         this.gameOverMessage();
         this.updateTrees(ctx);
+        if(this.points === this.pointsNeeded) {
+            this.levelUp();
+        }
     }
 
     updateTrees(ctx) {
@@ -143,17 +143,16 @@ export class Starfall extends GameTemplate {
             do {
                 positionStar = Math.random() * ctx.canvas.width;
             } while(positionStar < ctx.canvas.width/4 || positionStar > ctx.canvas.width - ctx.canvas.width/4);
-            this.stars.push(new Star(positionStar, 0, this.dropStarRadius, this.starSpeed));
+            let direction;
+            if(positionStar <= ctx.canvas.width/2) direction = -1;
+            else direction = 1;
+            this.stars.push(new Star(positionStar, direction, this.starSpeed));
         }
     }
 
     updateStars(ctx) {
         for(let i = this.stars.length - 1; i >= 0; i--) {
-            this.stars[i].update(ctx);
-
-            if(this.stars[i].radius < this.maxStarRadius) {
-                this.stars[i].radius += this.starSpeed * this.starIncreaseFactor;
-            }
+            this.stars[i].update(ctx, this.starSpeed);
 
             //Border
             //Count and delete lost stars.
@@ -162,13 +161,13 @@ export class Starfall extends GameTemplate {
                 this.deleteStar(i);
             }
 
-            if(this.stars[i].radius >= this.maxStarRadius) {
+            if(this.stars[i].catchable) {
                 //Count and delete caught stars.
                 if(GameObject.circleCollision(this.player, this.stars[i])) {
                     this.caught++;
                     this.deleteStar(i);   
                 }                 
-                }
+            }
         }
     }
 
@@ -178,13 +177,17 @@ export class Starfall extends GameTemplate {
 
     gameOverMessage() {
         if(this.gameOver === true) {
-            if(this.points < 0) {
-                this.gameOverText = ["GAME OVER"];
-            } 
+            if(this.voluntaryExit) this.gameOverText = ["EXITED GAME"];
+            else this.gameOverText = ["GAME OVER"];
+    
+            if(this.voluntaryExit) this.gameOverText.push("See you again soon!", "\n");
             else {
-                this.gameOverText = ["EXITED GAME"];
+                if(this.level > 4) this.gameOverText.push("Well done!", "\n"); //Adjust messages
+                else if(this.level > 6) this.gameOverText.push("Amazing job!", "\n");
+                else this.gameOverText.push("You can do better ;)", "\n");
             }
-            this.gameOverText.push("\n", "Level: " + this.level, "\n", "\n", "New Game: E")
+            
+            this.gameOverText.push("Level: " + this.level, "\n", "\n", "New Game: E")
         }
     }
 
@@ -216,16 +219,6 @@ export class Starfall extends GameTemplate {
 
     drawStars(ctx) {
         for(let i = 0; i < this.stars.length; i++) {
-            //Catchable stars start to shine:
-            if(this.stars[i].radius >= this.maxStarRadius) {
-                ctx.fillStyle = "#fac95e";
-                ctx.filter = "blur(10px)";
-                ctx.beginPath();
-                ctx.arc( this.stars[i].x, this.stars[i].y, this.stars[i].radius, 0, Math.PI * 2, true);
-                ctx.closePath();
-                ctx.fill();
-                ctx.filter ="none";
-            }
             this.stars[i].draw(ctx);
         }  
     }
