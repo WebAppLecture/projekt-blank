@@ -118,7 +118,7 @@ body {
     color: white;
     text-shadow: .05vh .05vh .6vh var(--azure);
     
-    margin: 25vh 41vh;
+    margin: 25vh 38vh;
 
     /*border: .3vh solid var(--glowBright);*/
     box-shadow: 0 0 1vh .2vh var(--azure),

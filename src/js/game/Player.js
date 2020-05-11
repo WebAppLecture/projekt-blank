@@ -3,7 +3,7 @@ import { SpriteMovableObject } from "../GameObject.js";
 export class Player extends SpriteMovableObject {
    
     constructor(speed) {
-        super(550, 600, 0, 0, 30, "src/images/firefly-placeholder.png");
+        super(550, 600, "white", 0, 0, 30, "src/images/firefly-placeholder.png");
         this.speed = speed;
     }
 

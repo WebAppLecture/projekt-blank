@@ -9,7 +9,7 @@ export class TreeRow extends MovingBackgroundObject {
         if(imageNumber < TreeRow.treeImages.length) image = TreeRow.treeImages[imageNumber];
         else image = treeImages[0];
 
-        super(x, y, 1100, 300, 0, treeSpeed, image);
+        super(x, y, "white", 1100, 300, 0, treeSpeed, image);
         this.initialDrawWidth = 1100;
         this.initialDrawHeight = 350;
         this.drawWidth = this.initialDrawWidth;
@@ -46,37 +46,53 @@ export class TreeRow extends MovingBackgroundObject {
     }
 }
 
-
-export class Moon extends SpriteMovableObject {
-    constructor() {
-        super(50, 180, 0, 0, 200, "src/images/moon-placeholder.png");
+export class CirculatingSpriteMovableObject extends SpriteMovableObject {
+    constructor(x, y, radius, circ, img) { 
+        super(x, y, "transparent", 0, 0, radius, img);
         this.angle = 0;
+        this.circ = circ; //circ = radius circulation
     }
 
     //https://stackoverflow.com/questions/17384663/canvas-move-object-in-circle
     update(ctx) {
-        let radius = 17;
-        this.angle += Math.acos(1 - Math.pow(1 / radius, 2) / 2); // TODO slow down
-        this.x += radius * Math.cos(this.angle); 
-        this.y += radius * Math.sin(this.angle);
+        this.angle += Math.acos((1 - Math.pow(1 / this.circ, 2) / 2)); // TODO slow down
+        this.vx = this.circ * Math.cos(this.angle); 
+        this.vy = this.circ * Math.sin(this.angle);
         super.update(ctx);
+    }
+
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
+    }
+}
+
+
+export class Moon extends CirculatingSpriteMovableObject {
+    constructor() {
+        super(300, 250, 200, 17, "src/images/moon-placeholder.png");
     }
 
     draw(ctx) {
         ctx.save();
         ctx.rotate( - Math.PI/180 * 20);
-        ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
+        super.draw(ctx);
         ctx.restore();
-     }
+    }
+
+    update(ctx) {
+        super.update(ctx);
+        //console.log(this.x) //apprx. max position values: high: 250 low: 825 left: 5 right: 580
+    }
  
 }
 
-export class Sun extends SpriteMovableObject {
+export class Sun extends CirculatingSpriteMovableObject {
     constructor() {
-        super(800, 140, 0, 0, 250, "src/images/sun-placeholder.png");
+        super(400, 600, 250, -17, "src/images/sun-placeholder.png");
     }
 
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
-     } 
+    update(ctx) {
+        super.update(ctx);
+        //console.log(this.x); //apprx. max position values: high: 25 low: 600 left: 120 right: 695
+    }
 }

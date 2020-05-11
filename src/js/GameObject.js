@@ -89,8 +89,8 @@ export class CircleMovableObject extends MovableGameObject {
 
 export class SpriteMovableObject extends CircleMovableObject {
 
-    constructor(x, y, vx, vy, radius, imgPath) {
-        super(x, y, "white", vx, vy, radius);
+    constructor(x, y, color, vx, vy, radius, imgPath) {
+        super(x, y, color, vx, vy, radius);
         this.img = document.createElement("img");
         this.img.src = imgPath;
     }
@@ -108,8 +108,8 @@ export class SpriteMovableObject extends CircleMovableObject {
 
 export class MovingBackgroundObject extends MovableGameObject {
 
-    constructor(x, y, width, height, vx, vy, imgPath) {
-        super(x, y, "red", width, height, vx, vy);
+    constructor(x, y, color, width, height, vx, vy, imgPath) {
+        super(x, y, color, width, height, vx, vy);
         this.img = document.createElement("img");
         this.img.src = imgPath;
     }

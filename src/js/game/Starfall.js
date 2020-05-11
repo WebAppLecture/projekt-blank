@@ -1,7 +1,7 @@
 import { GameObject } from "../GameObject.js";
 import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
-import { Star } from "./DropItems.js";
+import { Star, AllStar } from "./DropItems.js";
 import { TreeRow, Sun, Moon } from "./Background.js";
 
 export class Starfall extends GameTemplate {
@@ -37,13 +37,13 @@ export class Starfall extends GameTemplate {
         this.level = 1;
         this.lostPenalty = this.baseLostPenalty;
         this.playerSpeed = this.baseSpeed;
-        this.starSpeed = this.baseSpeed / 4;
+        this.itemSpeed = this.baseSpeed / 4;
         this.reset();
     }
 
     //Reset current game progress.
     reset() {
-        this.stars = [];
+        this.items = [];
         this.lost = 0;
         this.caught = 0;
         this.points = 0;
@@ -54,7 +54,7 @@ export class Starfall extends GameTemplate {
     levelUp() {
         this.level++;
         this.playerSpeed *= 1.1;
-        this.starSpeed += 0.5;
+        this.itemSpeed += 0.5;
         this.reset();
         //evtl modify starspawnmodifier/starspeed/lostPenalty
     }
@@ -74,13 +74,13 @@ export class Starfall extends GameTemplate {
 
     //Initializes forest background by creating a given number of trees.
     initTrees(number) {
-        let positionStart = 200;
+        let positionStart = 250;
         //Front rows:
         let distance = 100; //Distance to next tree row.
         let positionCurrent = positionStart;
         for(let i = this.trees.length; i < number; i++) {
             let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
-            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false));
+            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false)); //Push initial.
             this.treeCounter++;
             positionCurrent += distance;
         }
@@ -90,9 +90,9 @@ export class Starfall extends GameTemplate {
 
     //Adds a new tree row.
     newTree() {
-        let position = 200;
-        let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
-        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber, true));
+        let position = 250;
+        let imageNumber = this.treeCounter % TreeRow.treeImages.length;
+        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber, true)); //Unshift additional.
         this.treeCounter++;
     }
 
@@ -106,20 +106,28 @@ export class Starfall extends GameTemplate {
     }
 
     update(ctx) {
+        this.player.update(ctx);
+        this.updateGame(ctx);
+        this.updateBackground(ctx);
+    }
+
+    updateGame(ctx) {
+        this.dropItem(ctx);
+        this.updateItems(ctx);
         this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
         if(this.points < 0) {
             this.gameOver = true; 
         }
-        this.player.update(ctx);
-        this.dropStar(ctx);
-        this.updateStars(ctx);
-        this.gameOverMessage();
-        this.moon.update(ctx);
-        this.updateCounter++;
-        this.updateTrees(ctx);
-        if(this.points === this.pointsNeeded) {
+        else if(this.points >= this.pointsNeeded) {
             this.levelUp();
         }
+        this.gameOverMessage();
+    }
+
+    updateBackground(ctx) {
+        this.moon.update(ctx);
+        this.sun.update(ctx);
+        this.updateTrees(ctx);
     }
 
     updateTrees(ctx) {
@@ -138,11 +146,11 @@ export class Starfall extends GameTemplate {
     }
 
     //Drops new stars from the sky.
-    dropStar(ctx) {
-        // Add new star when 
-        // 1) there is no star yet 
-        // 2) the last added star has passed a certain percentage of the screen.
-        if(this.stars.length == 0 || this.stars[this.stars.length - 1].y >= ctx.canvas.height * this.starSpawnModifier) { 
+    dropItem(ctx) {
+        // Add new item when 
+        // 1) there is no item yet 
+        // 2) the last added item has passed a certain percentage of the screen.
+        if(this.items.length == 0 || this.items[this.items.length - 1].y >= ctx.canvas.height * this.starSpawnModifier) { 
             let positionStar;
             do {
                 positionStar = Math.random() * ctx.canvas.width;
@@ -150,33 +158,50 @@ export class Starfall extends GameTemplate {
             let direction;
             if(positionStar <= ctx.canvas.width/2) direction = -1;
             else direction = 1;
-            this.stars.push(new Star(positionStar, direction, this.starSpeed));
+            if(Math.random() > 0.95) {
+                this.items.push(new AllStar(positionStar, direction, this.itemSpeed)); // 5% drop chance
+            } else this.items.push(new Star(positionStar, direction, this.itemSpeed));
         }
     }
 
-    updateStars(ctx) {
-        for(let i = this.stars.length - 1; i >= 0; i--) {
-            this.stars[i].update(ctx, this.starSpeed);
+    updateItems(ctx) {
+        for(let i = this.items.length - 1; i >= 0; i--) {
+            this.items[i].update(ctx, this.itemSpeed);
 
             //Border
             //Count and delete lost stars.
-            if(this.stars[i].starBorderPassed(ctx)) {
+            if(this.items[i].itemBorderPassed(ctx)) {
                 this.lost++;
-                this.deleteStar(i);
+                this.deleteItem(i);
             }
 
-            if(this.stars[i].catchable) {
+            if(this.items[i].catchable) {
                 //Count and delete caught stars.
-                if(GameObject.circleCollision(this.player, this.stars[i])) {
-                    this.caught++;
-                    this.deleteStar(i);   
+                if(GameObject.circleCollision(this.player, this.items[i])) {
+                    if(this.items[i] instanceof Star) {
+                        this.caught++;
+                        this.deleteItem(i);   
+                    } else if (this.items[i] instanceof AllStar) {
+                        this.deleteItem(i);
+                        this.allStar = true;
+                        break;
+                    }
                 }                 
             }
         }
+        if(this.allStar) {
+            for(let i = this.items.length - 1; i >= 0; i--) {
+                if(this.items[i] instanceof Star) {
+                    this.caught++;
+                    this.deleteItem(i);
+                }
+            }
+            this.allStar = false;
+        }
     }
 
-    deleteStar(index) {
-        this.stars.splice(index, 1);
+    deleteItem(index) {
+        this.items.splice(index, 1);
     }
 
     gameOverMessage() {
@@ -201,7 +226,7 @@ export class Starfall extends GameTemplate {
         this.sun.draw(ctx);
         this.drawTrees(ctx);
         this.drawLevelAndPoints(ctx);
-        this.drawStars(ctx);
+        this.drawItems(ctx);
         this.player.draw(ctx);
     }
 
@@ -221,9 +246,9 @@ export class Starfall extends GameTemplate {
         }
     }
 
-    drawStars(ctx) {
-        for(let i = 0; i < this.stars.length; i++) {
-            this.stars[i].draw(ctx);
+    drawItems(ctx) {
+        for(let i = 0; i < this.items.length; i++) {
+            this.items[i].draw(ctx);
         }  
     }
 
@@ -242,6 +267,6 @@ export class Starfall extends GameTemplate {
     }
 
     static get NAME() {
-        return "Start Game: E";
+        return "Start Game: Enter";
     }
 }
