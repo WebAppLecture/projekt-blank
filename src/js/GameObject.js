@@ -70,27 +70,11 @@ export class MovableGameObject extends GameObject {
     }
 }
 
-export class CircleMovableObject extends MovableGameObject {
+export class SpriteCirclularMovableObject extends MovableGameObject {
 
-    constructor(x, y, color, vx, vy, radius) {
-        super(x, y, 0, 0, color, vx, vy);
+    constructor(x, y, vx, vy, color, radius, imgPath) {
+        super(x, y,  0, 0, color, vx, vy); 
         this.radius = radius;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
-        ctx.shadowBlur = 10;
-    }
-}
-
-export class SpriteMovableObject extends CircleMovableObject {
-
-    constructor(x, y, color, vx, vy, radius, imgPath) {
-        super(x, y, color, vx, vy, radius);
         this.img = document.createElement("img");
         this.img.src = imgPath;
     }
@@ -106,10 +90,10 @@ export class SpriteMovableObject extends CircleMovableObject {
     }
 }
 
-export class MovingBackgroundObject extends MovableGameObject {
+export class SpriteSquareMovableObject extends MovableGameObject {
 
-    constructor(x, y, color, width, height, vx, vy, imgPath) {
-        super(x, y, color, width, height, vx, vy);
+    constructor(x, y, width, height, vx, vy, imgPath) {
+        super(x, y, "red", width, height, vx, vy); //Color to test
         this.img = document.createElement("img");
         this.img.src = imgPath;
     }

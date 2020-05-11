@@ -1,9 +1,9 @@
-import { SpriteMovableObject } from "../GameObject.js";
+import { SpriteCirclularMovableObject } from "../GameObject.js";
 
-export class DropItem extends SpriteMovableObject {
+export class DropItem extends SpriteCirclularMovableObject {
     
-    constructor(x, color, direction, dropSpeed, img, catchableSize, sizeFactor) {
-        super(x, 40, color, Math.random() * dropSpeed/2 * direction, dropSpeed + 0.3, 0, img);
+    constructor(x, direction, dropSpeed, color, img, catchableSize, sizeFactor) {
+        super(x, 40, Math.random() * dropSpeed/2 * direction, dropSpeed + 0.3, color, 0, img);
         this.catchableSize = catchableSize;
         this.sizeFactor = sizeFactor;
         this.increase = true;
@@ -21,7 +21,7 @@ export class DropItem extends SpriteMovableObject {
             ctx.fill();
             ctx.filter ="none";
         }
-        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+        //Add draw image individually for each class.
     }
 
     update(ctx) {
@@ -43,15 +43,23 @@ export class DropItem extends SpriteMovableObject {
 export class Star extends DropItem {
     
     constructor(x, direction, starSpeed) {
-        super(x, "#fac95e", direction, starSpeed, "src/images/star.png",  10, 0.05);
+        super(x, direction, starSpeed, "#fac95e", "src/images/star.png",  10, 0.05);
     }
 
+    draw(ctx) {
+        super.draw(ctx);
+        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+    }
 }
 
 export class AllStar extends DropItem {
 
     constructor(x, direction, starSpeed) {
-        super(x, "#ce4750", direction, starSpeed, "src/images/allstar.png",  5, 0.03);
-        this.maxSize = 10;
+        super(x, direction, starSpeed, "#ce4750", "src/images/allstar.png",  5, 0.03);
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
     }
 }

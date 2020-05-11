@@ -1,5 +1,5 @@
 :root {
-    /*Border*/
+    /* Border */
     --glowDark: #533c0a;
     --glowBase: #906813;
     --glowMid: #bb8d2a;
@@ -7,12 +7,25 @@
     --glowMax: #ece1c8;
 
 
-    /*Screen*/
+    /* Screen */
+    /* DarkBlueHorizon */
     --blueDarkest: #040120;
     --blueDarker: #06012a;
     --blueDark: #1d1847;
     --blueMidDark: #241c6a;
+
+    /* RisingSunHorizon */
     --blueMid: #4012a2;
+    --blueMid: #5e1eac;
+    --blueMid: #8f34c1;
+    --blueMid: #bb378f;
+    --blueMid: #e44273;
+    --blueMid: #e05f5f;
+    --blueMid: #dc603b;
+    --blueMid: #e68f48;
+    --blueMid: #dda63e;
+    --blueMid: #f7d200;
+
     --blueBright: #a3a3ff;
 
     /*Horizon*/

@@ -1,6 +1,6 @@
-import { MovingBackgroundObject, SpriteMovableObject } from "../GameObject.js";
+import { SpriteSquareMovableObject, SpriteCirclularMovableObject } from "../GameObject.js";
 
-export class TreeRow extends MovingBackgroundObject {
+export class TreeRow extends SpriteSquareMovableObject {
 
     static treeImages = ["src/images/trees-placeholder.png"];
 
@@ -9,7 +9,7 @@ export class TreeRow extends MovingBackgroundObject {
         if(imageNumber < TreeRow.treeImages.length) image = TreeRow.treeImages[imageNumber];
         else image = treeImages[0];
 
-        super(x, y, "white", 1100, 300, 0, treeSpeed, image);
+        super(x, y, 1100, 300, 0, treeSpeed, image);
         this.initialDrawWidth = 1100;
         this.initialDrawHeight = 350;
         this.drawWidth = this.initialDrawWidth;
@@ -46,18 +46,21 @@ export class TreeRow extends MovingBackgroundObject {
     }
 }
 
-export class CirculatingSpriteMovableObject extends SpriteMovableObject {
-    constructor(x, y, radius, circ, img) { 
-        super(x, y, "transparent", 0, 0, radius, img);
+export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject {
+    constructor(startX, startY, radius, circ, img) { 
+        super(startX, startY, 0, 0, "transparent", radius, img);
+        this.startX = startX;
+        this.startY = startY;
         this.angle = 0;
-        this.circ = circ; //circ = radius circulation
+        this.speed = 1; //circulation speed 
+        this.circ = circ; //circulation radius
     }
 
     //https://stackoverflow.com/questions/17384663/canvas-move-object-in-circle
     update(ctx) {
-        this.angle += Math.acos((1 - Math.pow(1 / this.circ, 2) / 2)); // TODO slow down
-        this.vx = this.circ * Math.cos(this.angle); 
-        this.vy = this.circ * Math.sin(this.angle);
+        this.angle -= Math.acos((1 - Math.pow(this.speed / this.circ, 2) / 4)); 
+        this.x = 0.9 * (this.startX + this.circ * Math.cos(this.angle)); //Factor < 1: Slight ellipsis in y-direction -> Moon/Sun always appear separately.
+        this.y = 1.0 * (this.startY + this.circ * Math.sin(this.angle));
         super.update(ctx);
     }
 
@@ -68,8 +71,10 @@ export class CirculatingSpriteMovableObject extends SpriteMovableObject {
 
 
 export class Moon extends CirculatingSpriteMovableObject {
-    constructor() {
-        super(300, 250, 200, 17, "src/images/moon-placeholder.png");
+    constructor(speed) {
+        super(300, 600, 200, -400, "src/images/moon-placeholder.png");
+        this.angle = -4.5;
+        this.speed = speed * 1;
     }
 
     draw(ctx) {
@@ -81,18 +86,24 @@ export class Moon extends CirculatingSpriteMovableObject {
 
     update(ctx) {
         super.update(ctx);
-        //console.log(this.x) //apprx. max position values: high: 250 low: 825 left: 5 right: 580
+        //console.log(this.angle); //Find starting value for angle to get correct position.
+    }
+
+    goneDown(treePosition) {
+        return this.y + this.radius + 200 > treePosition;
     }
  
 }
 
 export class Sun extends CirculatingSpriteMovableObject {
-    constructor() {
-        super(400, 600, 250, -17, "src/images/sun-placeholder.png");
+    constructor(speed) {
+        super(400, 450, 250, 400, "src/images/sun-placeholder.png");
+        this.angle = 2;
+        this.speed = speed * 1;
     }
 
     update(ctx) {
         super.update(ctx);
-        //console.log(this.x); //apprx. max position values: high: 25 low: 600 left: 120 right: 695
+        console.log(this.y); //Find values for horizon change.
     }
 }

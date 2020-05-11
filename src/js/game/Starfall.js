@@ -15,9 +15,9 @@ export class Starfall extends GameTemplate {
     //Reduce number of variables!
 
     start() {
+        this.initBackground();
         this.baseStats();
         this.firstLevelStats();
-        this.initBackground();
         this.player = new Player(this.playerSpeed);
         this.gameOver = false;
         this.voluntaryExit = false;
@@ -62,22 +62,21 @@ export class Starfall extends GameTemplate {
     //Initializes background variables.
     initBackground() {
         this.updateCounter = 0;
-        this.sunMoonSpeed = 0.1;
         this.trees = [];
         this.treeSpeed = 0.5;
         this.numberOfTreeRows = 5;
+        this.lastTreePosition = 250;
         this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
         this.initTrees(this.numberOfTreeRows);
-        this.moon = new Moon();
-        this.sun = new Sun();
+        this.moon = new Moon(this.baseSpeed/3);
+        this.sun = new Sun(this.baseSpeed/3);
     }
 
     //Initializes forest background by creating a given number of trees.
     initTrees(number) {
-        let positionStart = 250;
         //Front rows:
         let distance = 100; //Distance to next tree row.
-        let positionCurrent = positionStart;
+        let positionCurrent = this.lastTreePosition;
         for(let i = this.trees.length; i < number; i++) {
             let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
             this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false)); //Push initial.
@@ -90,9 +89,8 @@ export class Starfall extends GameTemplate {
 
     //Adds a new tree row.
     newTree() {
-        let position = 250;
         let imageNumber = this.treeCounter % TreeRow.treeImages.length;
-        this.trees.unshift(new TreeRow(-5, position, this.treeSpeed, imageNumber, true)); //Unshift additional.
+        this.trees.unshift(new TreeRow(-5, this.lastTreePosition, this.treeSpeed, imageNumber, true)); //Unshift additional.
         this.treeCounter++;
     }
 
@@ -125,8 +123,16 @@ export class Starfall extends GameTemplate {
     }
 
     updateBackground(ctx) {
+        //if(this.moon != undefined) {
         this.moon.update(ctx);
+        //    if(this.moon.goneDown(this.lastTreePosition)) {
+        //        this.moon = undefined;
+        //        this.sun = new Sun(this.baseSpeed/3);
+        //    }
+        //}
+        //else {
         this.sun.update(ctx);
+        //}
         this.updateTrees(ctx);
     }
 
@@ -136,7 +142,6 @@ export class Starfall extends GameTemplate {
 
             if(this.trees[i].treeBorderPassed(ctx)) {
                 this.trees.splice(i, 1);
-                //console.log(i);
             }    
         }
 
@@ -222,8 +227,12 @@ export class Starfall extends GameTemplate {
 
     draw(ctx) {
         this.drawHorizonGradient(ctx);
+        //if(this.moon != undefined) {
         this.moon.draw(ctx);
+        //    console.log("moon");
+        //} else {
         this.sun.draw(ctx);
+        //}
         this.drawTrees(ctx);
         this.drawLevelAndPoints(ctx);
         this.drawItems(ctx);
@@ -231,11 +240,20 @@ export class Starfall extends GameTemplate {
     }
 
     drawHorizonGradient(ctx) {
-        let gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height); 
-        gradient.addColorStop(0, "#040120");
-        gradient.addColorStop(.1, "#06012a");
-        gradient.addColorStop(.3, "#1d1847");
-        gradient.addColorStop(.7, "#241c6a");
+        this.darkBlueHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a"];
+        this.risingSunHorizon = ["#06012a", "#1d1847", "#241c6a", "#4012a2", "#5e1eac", "#8f34c1", "#bb378f", 
+                                 "#e44273", "#e05f5f", "#dc603b", "#e68f48", "#dda63e", "#f7d200"];
+        this.risingPositions = [];
+
+        let gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+        //if(this.sun === undefined) { 
+            gradient.addColorStop(0, this.darkBlueHorizon[0]);
+            gradient.addColorStop(.1, this.darkBlueHorizon[1]);
+            gradient.addColorStop(.3, this.darkBlueHorizon[2]);
+            gradient.addColorStop(.7, this.darkBlueHorizon[3]);
+        //} else {
+            
+        //}
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
