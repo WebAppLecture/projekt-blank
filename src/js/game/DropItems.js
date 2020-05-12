@@ -42,8 +42,8 @@ export class DropItem extends SpriteCirclularMovableObject {
 
 export class Star extends DropItem {
     
-    constructor(x, direction, starSpeed) {
-        super(x, direction, starSpeed, "#fac95e", "src/images/star.png",  10, 0.05);
+    constructor(x, direction, itemSpeed) {
+        super(x, direction, itemSpeed, "#fac95e", "src/images/star.png",  10, 0.05);
     }
 
     draw(ctx) {
@@ -54,12 +54,37 @@ export class Star extends DropItem {
 
 export class AllStar extends DropItem {
 
-    constructor(x, direction, starSpeed) {
-        super(x, direction, starSpeed, "#ce4750", "src/images/allstar.png",  5, 0.03);
+    constructor(x, direction, itemSpeed) {
+        super(x, direction, itemSpeed, "#ce4750", "src/images/allstar.png",  5, 0.03);
     }
 
     draw(ctx) {
         super.draw(ctx);
         ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+    }
+}
+
+export class Magnet extends DropItem {
+    constructor(x, direction, itemSpeed) {
+        super(x, direction, itemSpeed, "white", "src/images/magnet.png", 5, 0.03);
+        this.angle = 0;
+    }
+
+    update(ctx) {
+        super.update(ctx);
+        this.angle %= 360; //Ensure value between 0 and 360.
+        this.angle += 5; 
+    }
+
+    draw(ctx) {
+        super.draw(ctx);
+        /*
+        ctx.save(); //Supposed to rotate around its own axis, currently doesn't work.
+        ctx.translate(this.x + this.radius / 2,this.y + this.radius / 2);
+        ctx.rotate(this.angle * Math.PI / 180);
+        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+        ctx.restore();
+        */
+       ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
     }
 }

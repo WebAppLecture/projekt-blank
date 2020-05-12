@@ -59,8 +59,8 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
     //https://stackoverflow.com/questions/17384663/canvas-move-object-in-circle
     update(ctx) {
         this.angle -= Math.acos((1 - Math.pow(this.speed / this.circ, 2) / 4)); 
-        this.x = 0.9 * (this.startX + this.circ * Math.cos(this.angle)); //Factor < 1: Slight ellipsis in y-direction -> Moon/Sun always appear separately.
-        this.y = 1.0 * (this.startY + this.circ * Math.sin(this.angle));
+        this.x = 1.0 * (this.startX + this.circ * Math.cos(this.angle)); 
+        this.y = 1.5 * (this.startY + this.circ * Math.sin(this.angle));//Factor > 1: Ellipsis, stretched in y-direction
         super.update(ctx);
     }
 
@@ -72,20 +72,27 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
 
 export class Moon extends CirculatingSpriteMovableObject {
     constructor(speed) {
-        super(300, 600, 200, -400, "src/images/moon-placeholder.png");
+        //super(300, 600, 200, -400, "src/images/moon-placeholder.png"); //without transform
+        super(150, 270, 200, -250, "src/images/moon-placeholder.png");
         this.angle = -4.5;
         this.speed = speed * 1;
     }
 
     draw(ctx) {
         ctx.save();
+        ctx.translate(this.x + this.radius/2, this.y + this.radius/2);
         ctx.rotate( - Math.PI/180 * 20);
         super.draw(ctx);
         ctx.restore();
     }
 
+    moonDown() {
+        return this.y > 300;
+    }
+
     update(ctx) {
         super.update(ctx);
+        console.log(this.y); //Get moon down postion.
         //console.log(this.angle); //Find starting value for angle to get correct position.
     }
 
@@ -97,13 +104,14 @@ export class Moon extends CirculatingSpriteMovableObject {
 
 export class Sun extends CirculatingSpriteMovableObject {
     constructor(speed) {
-        super(400, 450, 250, 400, "src/images/sun-placeholder.png");
-        this.angle = 2;
+        super(420, 280, 250, 250, "src/images/sun-placeholder.png");
+        this.angle = 1;
         this.speed = speed * 1;
     }
 
     update(ctx) {
         super.update(ctx);
+        console.log(this.angle);
         console.log(this.y); //Find values for horizon change.
     }
 }

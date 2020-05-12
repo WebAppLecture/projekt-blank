@@ -17,7 +17,7 @@ export class GameTemplate {
     }
 
     gameOverMessage() {
-        this.gameOverText = ["GAME OVER", " ", "Restart: E"];
+        this.message = ["GAME OVER", " ", "Restart: E"];
     }
 
     start() {}
@@ -26,7 +26,11 @@ export class GameTemplate {
 
     tick(ctx) {
         if(this.gameOver) {
-            this.gameOverScreen(ctx);
+            this.messageScreen(ctx);
+            return;
+        }
+        if(this.nextLevel) {
+            this.messageScreen(ctx);
             return;
         }
         this.update(ctx);
@@ -37,20 +41,25 @@ export class GameTemplate {
 
     draw() {}
 
-    gameOverScreen(ctx) {
+    messageScreen(ctx) {
         let fontSize = 30;
         ctx.fillStyle = this.fillStyle;
         ctx.font = fontSize + "px monospace";
         ctx.textAlign = "center";
         ctx.textBaseLine = "middle";
 
-        let startY = ctx.canvas.height/2 - this.gameOverText.length/2 * fontSize;
-        this.gameOverText.forEach((line, i) => {
+        let startY = ctx.canvas.height/2 - this.message.length/2 * fontSize;
+        this.message.forEach((line, i) => {
             ctx.fillText(line, ctx.canvas.width/2, startY + i * fontSize);
         }); 
     }
 
     input(type, active) {
+        if(this.nextLevel && type === "confirm") {
+            this.nextLevel = false;
+            this.startNextLevel();  
+            this.bindControls();   
+        }
         if(type === "exit") {
             this.gameOverMessage();
             this.gameOver = true;

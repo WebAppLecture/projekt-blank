@@ -1,7 +1,7 @@
 import { GameObject } from "../GameObject.js";
 import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
-import { Star, AllStar } from "./DropItems.js";
+import { Star, AllStar, Magnet } from "./DropItems.js";
 import { TreeRow, Sun, Moon } from "./Background.js";
 
 export class Starfall extends GameTemplate {
@@ -15,11 +15,11 @@ export class Starfall extends GameTemplate {
     //Reduce number of variables!
 
     start() {
-        this.initBackground();
         this.baseStats();
-        this.firstLevelStats();
+        this.firstLevel();
         this.player = new Player(this.playerSpeed);
         this.gameOver = false;
+        this.nextLevel = false;
         this.voluntaryExit = false;
     } 
 
@@ -33,11 +33,12 @@ export class Starfall extends GameTemplate {
     }
 
     //Set stats for first level.
-    firstLevelStats() {
+    firstLevel() {
         this.level = 1;
         this.lostPenalty = this.baseLostPenalty;
         this.playerSpeed = this.baseSpeed;
         this.itemSpeed = this.baseSpeed / 4;
+        this.initBackgroundStats();
         this.reset();
     }
 
@@ -48,34 +49,53 @@ export class Starfall extends GameTemplate {
         this.caught = 0;
         this.points = 0;
         this.pointsNeeded = this.basePointsNeeded * this.level;
+        this.player = new Player(this.playerSpeed);
+        this.initBackground();
     }
 
     //Modifies stats for next difficulty level.
     levelUp() {
+        this.nextLevel = true;
+        this.nextLevelMessage();
+    }
+
+    startNextLevel() {
+        this.updateGameStats();
+        this.updateBackgroundStats();
+        this.reset();
+    }
+
+    updateGameStats() {
         this.level++;
         this.playerSpeed *= 1.1;
         this.itemSpeed += 0.5;
-        this.reset();
-        //evtl modify starspawnmodifier/starspeed/lostPenalty
+    }
+
+    updateBackgroundStats() {
+        this.treeSpeed += 0.4;
+        this.horizonSpeed *= 0.7;
     }
 
     //Initializes background variables.
-    initBackground() {
-        this.updateCounter = 0;
-        this.trees = [];
+    initBackgroundStats() {
         this.treeSpeed = 0.5;
         this.numberOfTreeRows = 5;
         this.lastTreePosition = 250;
+        this.horizonSpeed = 1;
+    }
+
+    initBackground() {
+        this.trees = [];
         this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
         this.initTrees(this.numberOfTreeRows);
-        this.moon = new Moon(this.baseSpeed/3);
-        this.sun = new Sun(this.baseSpeed/3);
+        this.moon = new Moon(this.horizonSpeed);
+        //this.sun = new Sun(this.horizonSpeed * 1.1);
     }
 
     //Initializes forest background by creating a given number of trees.
     initTrees(number) {
         //Front rows:
-        let distance = 100; //Distance to next tree row.
+        let distance = this.lastTreePosition / this.numberOfTreeRows * 2; //Distance to next tree row.
         let positionCurrent = this.lastTreePosition;
         for(let i = this.trees.length; i < number; i++) {
             let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
@@ -115,24 +135,22 @@ export class Starfall extends GameTemplate {
         this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
         if(this.points < 0) {
             this.gameOver = true; 
+            this.gameOverMessage();
         }
         else if(this.points >= this.pointsNeeded) {
             this.levelUp();
         }
-        this.gameOverMessage();
     }
 
     updateBackground(ctx) {
-        //if(this.moon != undefined) {
-        this.moon.update(ctx);
-        //    if(this.moon.goneDown(this.lastTreePosition)) {
-        //        this.moon = undefined;
-        //        this.sun = new Sun(this.baseSpeed/3);
-        //    }
-        //}
-        //else {
-        this.sun.update(ctx);
-        //}
+        if(this.moon !== undefined) {
+            this.moon.update(ctx);
+            if(this.moon.moonDown()) {
+                this.switchSky();
+            }
+        } else {
+            this.sun.update(ctx);
+        }
         this.updateTrees(ctx);
     }
 
@@ -150,33 +168,45 @@ export class Starfall extends GameTemplate {
         }
     }
 
+    switchSky() {
+        this.moon = undefined;
+        this.sun = new Sun(this.horizonSpeed * 1.1);
+    }
+
     //Drops new stars from the sky.
     dropItem(ctx) {
         // Add new item when 
         // 1) there is no item yet 
         // 2) the last added item has passed a certain percentage of the screen.
         if(this.items.length == 0 || this.items[this.items.length - 1].y >= ctx.canvas.height * this.starSpawnModifier) { 
-            let positionStar;
+            let positionItem;
             do {
-                positionStar = Math.random() * ctx.canvas.width;
-            } while(positionStar < ctx.canvas.width/4 || positionStar > ctx.canvas.width - ctx.canvas.width/4);
+                positionItem = Math.random() * ctx.canvas.width;
+            } while(positionItem < ctx.canvas.width/4 || positionItem > ctx.canvas.width - ctx.canvas.width/4);
             let direction;
-            if(positionStar <= ctx.canvas.width/2) direction = -1;
+            if(positionItem <= ctx.canvas.width/2) direction = -1;
             else direction = 1;
-            if(Math.random() > 0.95) {
-                this.items.push(new AllStar(positionStar, direction, this.itemSpeed)); // 5% drop chance
-            } else this.items.push(new Star(positionStar, direction, this.itemSpeed));
+            let randomSpawn = Math.random();
+            if(randomSpawn > 0.9) {
+                if(randomSpawn > 0.97) {
+                    this.items.push(new Magnet(positionItem, direction, this.itemSpeed)) //3% drop chance
+                } else {
+                    this.items.push(new AllStar(positionItem, direction, this.itemSpeed)); // 7% drop chance
+                }
+            } else this.items.push(new Star(positionItem, direction, this.itemSpeed)); //default drop
         }
     }
 
     updateItems(ctx) {
         for(let i = this.items.length - 1; i >= 0; i--) {
-            this.items[i].update(ctx, this.itemSpeed);
+            this.items[i].update(ctx);
 
             //Border
-            //Count and delete lost stars.
+            //Count lost stars and delete all lost items.
             if(this.items[i].itemBorderPassed(ctx)) {
-                this.lost++;
+                if(this.items[i] instanceof Star) { //Only missed stars cause point loss; special items don't count.
+                    this.lost++; 
+                }
                 this.deleteItem(i);
             }
 
@@ -184,55 +214,85 @@ export class Starfall extends GameTemplate {
                 //Count and delete caught stars.
                 if(GameObject.circleCollision(this.player, this.items[i])) {
                     if(this.items[i] instanceof Star) {
-                        this.caught++;
                         this.deleteItem(i);   
+                        this.caught++;
                     } else if (this.items[i] instanceof AllStar) {
-                        this.deleteItem(i);
+                        this.deleteItem(i);   
                         this.allStar = true;
                         break;
-                    }
+                    } 
+                    //Add magnet.
                 }                 
             }
         }
-        if(this.allStar) {
+        if(this.allStar) { 
             for(let i = this.items.length - 1; i >= 0; i--) {
-                if(this.items[i] instanceof Star) {
-                    this.caught++;
-                    this.deleteItem(i);
-                }
+            if(this.items[i] instanceof Star) {
+                this.caught++;
+                this.deleteItem(i);
             }
-            this.allStar = false;
         }
+        this.allStar = false; 
+        }
+        //if(this.magnet) { this.magnetEffect(); }
+    }
+
+    catchSound() {
+
+    }
+
+    allStarEffect() {
+        for(let i = this.items.length - 1; i >= 0; i--) {
+            if(this.items[i] instanceof Star) {
+                this.caught++;
+                this.deleteItem(i);
+            }
+        }
+        this.allStar = false;
+    }
+
+    magnetEffect() {
+        //Add magnet effect -> all Stars move towards player.
+        this.magnet = false;
     }
 
     deleteItem(index) {
         this.items.splice(index, 1);
     }
 
+    nextLevelMessage() {
+        if(this.nextLevel === true) { 
+            if(this.level <= 3) this.message = ["Well done!"];
+            else if(this.level <= 5) this.message = ["Great job!"];
+            else if(this.level >= 6) this.message = ["Amazing flying skills!"];
+            this.message.push(" ", " ", "Ready for level " + (this.level + 1) + "?", " ", "Next Level: Enter");
+        }
+    }
+
     gameOverMessage() {
         if(this.gameOver === true) {
-            if(this.voluntaryExit) this.gameOverText = ["EXITED GAME"];
-            else this.gameOverText = ["GAME OVER"];
+            if(this.voluntaryExit) this.message = ["EXITED GAME"];
+            else this.message = ["GAME OVER"];
     
-            if(this.voluntaryExit) this.gameOverText.push("See you again soon!", "\n");
+            if(this.voluntaryExit) this.message.push("See you again soon!", "\n");
             else {
-                if(this.level > 4) this.gameOverText.push("Well done!", "\n"); //Adjust messages
-                else if(this.level > 6) this.gameOverText.push("Amazing job!", "\n");
-                else this.gameOverText.push("You can do better ;)", "\n");
+                if(this.level > 4) this.message.push("Well done!", "\n"); //Adjust messages
+                else if(this.level > 6) this.message.push("Great job!", "\n");
+                else this.message.push("You can do better ;)", "\n");
             }
             
-            this.gameOverText.push("Level: " + this.level, "\n", "\n", "New Game: E")
+            this.message.push("Level: " + this.level, "\n", "\n", "New Game: Enter")
         }
     }
 
     draw(ctx) {
         this.drawHorizonGradient(ctx);
-        //if(this.moon != undefined) {
-        this.moon.draw(ctx);
+        if(this.moon !== undefined) {
+            this.moon.draw(ctx);
         //    console.log("moon");
-        //} else {
-        this.sun.draw(ctx);
-        //}
+        } else {
+            this.sun.draw(ctx);
+        }
         this.drawTrees(ctx);
         this.drawLevelAndPoints(ctx);
         this.drawItems(ctx);
