@@ -11,17 +11,15 @@ export class Starfall extends GameTemplate {
     //TODO: 
     //Improve controls
     //Finetune hitboxes
-    //Add boosters
+    //Add magnet, jewel, clock
     //Add background
-    //Add horizon change
+
     //Add level visual
     //Add lightening (?)
     //Add button sound
     //Add tutorial -> controls/dropItems
     //Modify level up messages
     //Clean up methods/classes
-
-    //favicon.ico not found??
 
     start() {
         this.initSounds();
@@ -96,6 +94,16 @@ export class Starfall extends GameTemplate {
         this.numberOfTreeRows = 5;
         this.lastTreePosition = 250;
         this.horizonSpeed = 1;
+        this.sunHorizonFirstIndex = 0;
+
+        this.darkBlueHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a"];
+
+        this.risingSunHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a", 
+                                 "#281996", "#3723d3", "#6450ff", "#8071f0",
+                                 "#b55ce6", "#e65cd4", "#e44273", "#dc603b",
+                                 "#e68f48", "#dda63e", "#f7d200"];
+
+        this.calcRisingPositons();
     }
 
     initBackground() {
@@ -164,8 +172,23 @@ export class Starfall extends GameTemplate {
             }
         } else {
             this.sun.update(ctx);
+            if(this.sun.isUp()) {
+                this.gameOver = true;
+                this.gameOverMessage();
+            }
+            this.updateSunHorizonIndex();
         }
         this.updateTrees(ctx);
+    }
+
+    updateSunHorizonIndex() {
+        for(let i = 1; i < this.risingPositions.length - 4; i++) {
+            if(this.sun.y > this.risingPositions[i]) {
+                this.sunHorizonFirstIndex = i - 1;
+                //console.log(this.sunHorizonFirstIndex)
+                break;
+            }
+        }
     }
 
     updateTrees(ctx) {
@@ -233,27 +256,22 @@ export class Starfall extends GameTemplate {
                     } else if (this.items[i] instanceof AllStar) {
                         this.deleteItem(i);   
                         this.allStar = true;
-                        this.starSound.play();
+                        //this.starSound.play(); //favicon.ico not found??
                         break;
                     } 
-                    //Add magnet.
-                }                 
+                    else if (this.items[i] instanceof Magnet) {
+                        this.deleteItem(i);   
+                        this.magnet = true;
+                    }
+                }
             }
         }
         if(this.allStar) { 
-            for(let i = this.items.length - 1; i >= 0; i--) {
-            if(this.items[i] instanceof Star) {
-                this.caught++;
-                this.deleteItem(i);
-            }
+            this.allStarEffect();
         }
-        this.allStar = false; 
+        if(this.magnet) { 
+            this.magnetEffect(); 
         }
-        //if(this.magnet) { this.magnetEffect(); }
-    }
-
-    catchSound() {
-
     }
 
     allStarEffect() {
@@ -267,7 +285,7 @@ export class Starfall extends GameTemplate {
     }
 
     magnetEffect() {
-        //Add magnet effect -> all Stars move towards player.
+        //Add magnet effect.
         this.magnet = false;
     }
 
@@ -304,7 +322,6 @@ export class Starfall extends GameTemplate {
         this.drawHorizonGradient(ctx);
         if(this.moon !== undefined) {
             this.moon.draw(ctx);
-        //    console.log("moon");
         } else {
             this.sun.draw(ctx);
         }
@@ -314,23 +331,48 @@ export class Starfall extends GameTemplate {
         this.player.draw(ctx);
     }
 
+    //TODO: Finetune intervals.
     drawHorizonGradient(ctx) {
-        this.darkBlueHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a"];
-        this.risingSunHorizon = ["#06012a", "#1d1847", "#241c6a", "#4012a2", "#5e1eac", "#8f34c1", "#bb378f", 
-                                 "#e44273", "#e05f5f", "#dc603b", "#e68f48", "#dda63e", "#f7d200"];
-        this.risingPositions = [];
-
         let gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-        //if(this.sun === undefined) { 
-            gradient.addColorStop(0, this.darkBlueHorizon[0]);
-            gradient.addColorStop(.1, this.darkBlueHorizon[1]);
-            gradient.addColorStop(.3, this.darkBlueHorizon[2]);
-            gradient.addColorStop(.7, this.darkBlueHorizon[3]);
-        //} else {
-            
-        //}
+        let interval = 0.6 / 3;
+        if(this.moon !== undefined) { 
+            gradient.addColorStop(0.0, this.darkBlueHorizon[0]);
+            gradient.addColorStop(interval, this.darkBlueHorizon[1]);
+            gradient.addColorStop(interval * 2, this.darkBlueHorizon[2]);
+            gradient.addColorStop(interval * 3, this.darkBlueHorizon[3]);
+        } else {
+            gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+            if(this.sunHorizonFirstIndex > 6) {
+                let stops = 3 + (this.sunHorizonFirstIndex - 6);
+                interval = 0.5 / stops;
+                //console.log(stops);
+            }
+
+            gradient.addColorStop(0.0, this.risingSunHorizon[this.sunHorizonFirstIndex]);
+
+            let percent = 0.2;
+            let i = 1;
+            while(percent <= 0.7) {
+                //console.log(this.sunHorizonFirstIndex + i);
+                gradient.addColorStop(percent, this.risingSunHorizon[this.sunHorizonFirstIndex + i]);
+                percent += interval;
+                i++;
+            }
+        }
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+
+    calcRisingPositons() {
+        this.risingPositions = []
+        let max = 70;
+        let min = 500;
+        let interval = (min - max) / this.risingSunHorizon.length;
+        let nextPosition = min - interval;
+        do {
+            this.risingPositions.push(nextPosition);
+            nextPosition -= interval * 1;
+        } while (nextPosition >= max)
     }
 
     drawTrees(ctx) {

@@ -64,7 +64,7 @@ body {
     position: absolute;
     padding: 1vh;
 
-    background: green;
+    background: black;
 
     box-shadow: 0 0 .5vh .3vh var(--glowDark)
 }

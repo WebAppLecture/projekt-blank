@@ -14,30 +14,18 @@
     --blueDark: #1d1847;
     --blueMidDark: #241c6a;
 
-    /* RisingSunHorizon */
-    --blueMid: #4012a2;
-    --blueMid: #5e1eac;
-    --blueMid: #8f34c1;
-    --blueMid: #bb378f;
-    --blueMid: #e44273;
-    --blueMid: #e05f5f;
-    --blueMid: #dc603b;
-    --blueMid: #e68f48;
-    --blueMid: #dda63e;
-    --blueMid: #f7d200;
+    /* RisingSunHorizon, only here to preview colors for horizon change in js */
+    --sun: #281996;
+    --sun: #3723d3;
+    --sun: #6450ff;
+    --sun: #8071f0;
 
-    --blueBright: #a3a3ff;
+    --sun: #b55ce6;
+    --sun: #e65cd4;
+    --sun: #e44273;
+    --sun: #dc603b;
 
-    /*Horizon*/
-    --brightOrange: #ec966c;
-    --orange: #f2671f;
-    
-    --red: #c91b26;
-    --redGlow: #ce4750;
-    --lightShadowRed: #5e0b10;
-    --shadowRed: #4e080d;
-    
-    --violet: #560c86;
-    
-    --azure: #7fbbd3;
+    --sun: #e68f48;
+    --sun: #dda63e;
+    --sun: #f7d200;
 }

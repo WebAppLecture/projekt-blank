@@ -87,19 +87,14 @@ export class Moon extends CirculatingSpriteMovableObject {
     }
 
     moonDown() {
-        return this.y > 300;
+        return this.y >= 300;
     }
 
     update(ctx) {
         super.update(ctx);
         //console.log(this.y); //Get moon down postion.
         //console.log(this.angle); //Find starting value for angle to get correct position.
-    }
-
-    goneDown(treePosition) {
-        return this.y + this.radius + 200 > treePosition;
-    }
- 
+    } 
 }
 
 export class Sun extends CirculatingSpriteMovableObject {
@@ -113,5 +108,9 @@ export class Sun extends CirculatingSpriteMovableObject {
         super.update(ctx);
         //console.log(this.angle);
         //console.log(this.y); //Find values for horizon change.
+    }
+
+    isUp() {
+        return this.y <= 70;
     }
 }
