@@ -12,7 +12,8 @@ export class Starfall extends GameTemplate {
     //Improve controls
     //Finetune hitboxes
     //Add magnet, jewel, clock
-    //Add background
+    //Add background images
+    //Add white/grey progress bar
 
     //Add level visual
     //Add lightening (?)
@@ -63,6 +64,23 @@ export class Starfall extends GameTemplate {
         this.pointsNeeded = this.basePointsNeeded * this.level;
         this.player = new Player(this.playerSpeed);
         this.initBackground();
+        this.resetProgressBar();
+    }
+
+    fullBorder() {
+        document.getElementById("progress").style.marginTop = "-110vh";
+    }
+
+    resetProgressBar() {
+        document.getElementById("progress").style.marginTop = "-24vh";
+    }
+
+    updateProgressBar() {
+        let fullRange = 110 - 24; //See css comment (progressBox).
+        let revealPercent = this.points / this.pointsNeeded; //Current percent of points needed.
+        this.baseProgressMargin = -24; //Margin value: Progress box hides bar.
+        this.progressMargin = this.baseProgressMargin - revealPercent * fullRange; //New margin value
+        document.getElementById("progress").style.marginTop = "" + this.progressMargin + "vh"; //Reveal percent of glowing border as level progress indicator.
     }
 
     //Modifies stats for next difficulty level.
@@ -149,6 +167,7 @@ export class Starfall extends GameTemplate {
         this.player.update(ctx);
         this.updateGame(ctx);
         this.updateBackground(ctx);
+        this.updateProgressBar();
     }
 
     updateGame(ctx) {

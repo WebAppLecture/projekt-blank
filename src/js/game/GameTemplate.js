@@ -42,6 +42,7 @@ export class GameTemplate {
     draw() {}
 
     messageScreen(ctx) {
+        this.fullBorder();
         let fontSize = 30;
         ctx.fillStyle = this.fillStyle;
         ctx.font = fontSize + "px monospace";

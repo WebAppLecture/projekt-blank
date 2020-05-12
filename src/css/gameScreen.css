@@ -33,7 +33,7 @@ body {
     text-shadow: .05vh .05vh 1vh var(--glowMid);
 }
 
-.outerBox { /*Border around game window, planned: fills up with light when stars collected => displays progress*/
+.outerBox { /*Border around game window, with level progress golden light is revealed*/
     width: 114vh;
     height: 74vh; 
 
@@ -85,7 +85,7 @@ body {
     width: 200vh;
     height: 100vh; 
 
-    margin: -110vh 0vh 0 -70vh; /*adjust first margin value to display/hide gold border*/
+    margin: -110vh 0vh 0 -70vh; /*Adjust top  margin value to display/hide gold progress bar; Values: bar fully visible at -110vh, fully hidden at -24vh */
     position: absolute;
     padding: 1vh;
 
@@ -120,7 +120,7 @@ body {
     
     margin: 25vh 38vh;
 
-    /*border: .3vh solid var(--glowBright);*/
+    /*border: .3vh solid var(--glowMax);*/
     box-shadow: 0 0 1vh .2vh var(--azure),
                 0 0 .5vh .1vh inset white;
 }
