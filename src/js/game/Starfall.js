@@ -345,7 +345,7 @@ export class Starfall extends GameTemplate {
             this.sun.draw(ctx);
         }
         this.drawTrees(ctx);
-        this.drawLevelAndPoints(ctx);
+        this.drawLevel(ctx);
         this.drawItems(ctx);
         this.player.draw(ctx);
     }
@@ -406,13 +406,13 @@ export class Starfall extends GameTemplate {
         }  
     }
 
-    drawLevelAndPoints(ctx) {
+    drawLevel(ctx) {
         let fontSize = 30;
         ctx.fillStyle = this.fillStyle;
         ctx.font = fontSize + "px monospace";
         ctx.textAlign = "center";
         ctx.textBaseLine = "middle";
-        let text = ["Points: " + this.points, "", " Level: " + this.level]; //round ceil/floor or count lost stars and deduct full points
+        let text = [" Level: " + this.level]; 
 
         for(let  i = 0; i < text.length; i++) {
             let startY = text.length/2 + fontSize * 2;
