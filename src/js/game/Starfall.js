@@ -2,19 +2,29 @@ import { GameObject } from "../GameObject.js";
 import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
 import { Star, AllStar, Magnet } from "./DropItems.js";
+import { Sound } from "./Sound.js";
 import { TreeRow, Sun, Moon } from "./Background.js";
+
 
 export class Starfall extends GameTemplate {
     
     //TODO: 
-    //Improve direction change
-    //Modify levelUp stats
-    //Finetune hitbox player
-    //Add background
+    //Improve controls
+    //Finetune hitboxes
     //Add boosters
-    //Reduce number of variables!
+    //Add background
+    //Add horizon change
+    //Add level visual
+    //Add lightening (?)
+    //Add button sound
+    //Add tutorial -> controls/dropItems
+    //Modify level up messages
+    //Clean up methods/classes
+
+    //favicon.ico not found??
 
     start() {
+        this.initSounds();
         this.baseStats();
         this.firstLevel();
         this.player = new Player(this.playerSpeed);
@@ -22,6 +32,10 @@ export class Starfall extends GameTemplate {
         this.nextLevel = false;
         this.voluntaryExit = false;
     } 
+
+    initSounds() {
+        this.starSound = new Sound("src/sounds/star.mp3");
+    }
 
     //Initializes base stats (final).
     baseStats() {
@@ -219,6 +233,7 @@ export class Starfall extends GameTemplate {
                     } else if (this.items[i] instanceof AllStar) {
                         this.deleteItem(i);   
                         this.allStar = true;
+                        this.starSound.play();
                         break;
                     } 
                     //Add magnet.

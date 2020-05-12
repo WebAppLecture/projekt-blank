@@ -92,7 +92,7 @@ export class Moon extends CirculatingSpriteMovableObject {
 
     update(ctx) {
         super.update(ctx);
-        console.log(this.y); //Get moon down postion.
+        //console.log(this.y); //Get moon down postion.
         //console.log(this.angle); //Find starting value for angle to get correct position.
     }
 
@@ -111,7 +111,7 @@ export class Sun extends CirculatingSpriteMovableObject {
 
     update(ctx) {
         super.update(ctx);
-        console.log(this.angle);
-        console.log(this.y); //Find values for horizon change.
+        //console.log(this.angle);
+        //console.log(this.y); //Find values for horizon change.
     }
 }
