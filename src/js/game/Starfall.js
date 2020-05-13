@@ -3,7 +3,7 @@ import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
 import { Star, AllStar, Magnet } from "./DropItems.js";
 import { Sound } from "./Sound.js";
-import { TreeRow, Sun, Moon } from "./Background.js";
+import { TreeRow, Sun, Moon } from "./BackgroundObjects.js";
 
 
 export class Starfall extends GameTemplate {
@@ -138,8 +138,8 @@ export class Starfall extends GameTemplate {
         let distance = this.lastTreePosition / this.numberOfTreeRows * 2; //Distance to next tree row.
         let positionCurrent = this.lastTreePosition;
         for(let i = this.trees.length; i < number; i++) {
-            let imageNumber = this.treeCounter % TreeRow.treeImages.length; //Select tree image based on available number of variations, then repeat.
-            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false)); //Push initial.
+            let imageNumber = this.treeCounter % this.imageLoader.numberTreeImages; //Select tree image based on available number of variations, then repeat.
+            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false, this.imageLoader.numberTreeImages)); //Push initial.
             this.treeCounter++;
             positionCurrent += distance;
         }
@@ -149,8 +149,8 @@ export class Starfall extends GameTemplate {
 
     //Adds a new tree row.
     newTree() {
-        let imageNumber = this.treeCounter % TreeRow.treeImages.length;
-        this.trees.unshift(new TreeRow(-5, this.lastTreePosition, this.treeSpeed, imageNumber, true)); //Unshift additional.
+        let imageNumber = this.treeCounter % this.imageLoader.numberTreeImages;
+        this.trees.unshift(new TreeRow(-5, this.lastTreePosition, this.treeSpeed, imageNumber, true, this.imageLoader.numberTreeImages)); //Unshift additional.
         this.treeCounter++;
     }
 

@@ -16,6 +16,10 @@ body {
     display: none;
 }
 
+.images {
+    display: none;
+}
+
 .game {
     position: relative;
     width: 114vh; 

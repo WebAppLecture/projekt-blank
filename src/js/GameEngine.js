@@ -1,7 +1,6 @@
 import { Inputs } from "./Inputs.js";
 import { Menu } from "./Menu.js";
 import { Starfall } from "./game/Starfall.js";
-import { Player } from "./game/Player.js";
 
 export class GameEngine {
 

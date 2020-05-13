@@ -2,14 +2,13 @@ import { SpriteSquareMovableObject, SpriteCirclularMovableObject } from "../Game
 
 export class TreeRow extends SpriteSquareMovableObject {
 
-    static treeImages = ["src/images/trees-placeholder.png"];
+    constructor(x, y, treeSpeed, imageNumber, lastRow, imageArrayLength) {
+        //if(imageNumber < imageArrayLength) this.img = document.getElementById("treeRowImage" + imageNumber);
+        //else 
 
-    constructor(x, y, treeSpeed, imageNumber, lastRow) {
-        let image;
-        if(imageNumber < TreeRow.treeImages.length) image = TreeRow.treeImages[imageNumber];
-        else image = treeImages[0];
+        super(x, y, 1100, 300, 0, treeSpeed);
+        this.img = document.getElementById("treeRowImage0");
 
-        super(x, y, 1100, 300, 0, treeSpeed, image);
         this.initialDrawWidth = 1100;
         this.initialDrawHeight = 350;
         this.drawWidth = this.initialDrawWidth;
@@ -39,16 +38,16 @@ export class TreeRow extends SpriteSquareMovableObject {
         if(lastRow) {
             ctx.save();
             ctx.globalAlpha = this.transparency; //TODO doesnt work
-            ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
+            if(this.img) ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
             ctx.restore();
         }
-        else ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
+        else if(this.img) ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
     }
 }
 
 export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject {
-    constructor(startX, startY, radius, circ, img) { 
-        super(startX, startY, 0, 0, "transparent", radius, img);
+    constructor(startX, startY, radius, circ) { 
+        super(startX, startY, 0, 0, "transparent", radius);
         this.startX = startX;
         this.startY = startY;
         this.angle = 0;
@@ -64,7 +63,8 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
         super.update(ctx);
     }
 
-    draw(ctx) {
+    draw(ctx, imageID) {
+        this.img = document.getElementById(imageID);
         ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
     }
 }
@@ -73,7 +73,7 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
 export class Moon extends CirculatingSpriteMovableObject {
     constructor(speed) {
         //super(300, 600, 200, -400, "src/images/moon-placeholder.png"); //without transform
-        super(150, 270, 200, -250, "src/images/moon-placeholder.png");
+        super(150, 270, 200, -250);
         this.angle = -4.5;
         this.speed = speed * 1;
     }
@@ -82,7 +82,7 @@ export class Moon extends CirculatingSpriteMovableObject {
         ctx.save();
         ctx.translate(this.x + this.radius/2, this.y + this.radius/2);
         ctx.rotate( - Math.PI/180 * 20);
-        super.draw(ctx);
+        super.draw(ctx, "moonImage");
         ctx.restore();
     }
 
@@ -99,7 +99,7 @@ export class Moon extends CirculatingSpriteMovableObject {
 
 export class Sun extends CirculatingSpriteMovableObject {
     constructor(speed) {
-        super(420, 280, 250, 250, "src/images/sun-placeholder.png");
+        super(420, 280, 250, 250);
         this.angle = 1;
         this.speed = speed * 1;
     }
@@ -108,6 +108,10 @@ export class Sun extends CirculatingSpriteMovableObject {
         super.update(ctx);
         //console.log(this.angle);
         //console.log(this.y); //Find values for horizon change.
+    }
+
+    draw(ctx) {
+        super.draw(ctx, "sunImage");
     }
 
     isUp() {

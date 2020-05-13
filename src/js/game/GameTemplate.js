@@ -1,6 +1,9 @@
+import { ImageInitializer } from "./ImageInitializer.js";
+
 export class GameTemplate {
 
     constructor(mode) {
+        this.imageLoader = new ImageInitializer();
         this.fillStyle = "white";
         this.applyMode(mode);
         this.start();

@@ -2,12 +2,13 @@ import { SpriteCirclularMovableObject } from "../GameObject.js";
 
 export class DropItem extends SpriteCirclularMovableObject {
     
-    constructor(x, direction, dropSpeed, color, img, catchableSize, sizeFactor) {
-        super(x, 40, Math.random() * dropSpeed/2 * direction, dropSpeed + 0.3, color, 0, img);
+    constructor(x, direction, dropSpeed, color, catchableSize, sizeFactor, imageID) {
+        super(x, 40, Math.random() * dropSpeed/2 * direction, dropSpeed + 0.3, color, 0);
         this.catchableSize = catchableSize;
         this.sizeFactor = sizeFactor;
         this.increase = true;
         this.catchable = false;
+        this.image = document.getElementById(imageID);
     }
 
     draw(ctx) {
@@ -43,30 +44,30 @@ export class DropItem extends SpriteCirclularMovableObject {
 export class Star extends DropItem {
     
     constructor(x, direction, itemSpeed) {
-        super(x, direction, itemSpeed, "#fac95e", "src/images/star.png",  10, 0.05);
+        super(x, direction, itemSpeed, "#fac95e", 10, 0.05, "starImage");
     }
 
     draw(ctx) {
         super.draw(ctx);
-        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+        ctx.drawImage(this.image, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
     }
 }
 
 export class AllStar extends DropItem {
 
     constructor(x, direction, itemSpeed) {
-        super(x, direction, itemSpeed, "#ce4750", "src/images/allstar.png",  5, 0.03);
+        super(x, direction, itemSpeed, "#ce4750", 5, 0.03, "allStarImage");
     }
 
     draw(ctx) {
         super.draw(ctx);
-        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+        ctx.drawImage(this.image, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
     }
 }
 
 export class Magnet extends DropItem {
     constructor(x, direction, itemSpeed) {
-        super(x, direction, itemSpeed, "white", "src/images/magnet.png", 5, 0.03);
+        super(x, direction, itemSpeed, "white", 5, 0.03, "magnetImage");
         this.angle = 0;
     }
 
@@ -85,6 +86,6 @@ export class Magnet extends DropItem {
         ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
         ctx.restore();
         */
-       ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+       ctx.drawImage(this.image, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
     }
 }

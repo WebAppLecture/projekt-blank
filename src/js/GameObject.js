@@ -72,33 +72,29 @@ export class MovableGameObject extends GameObject {
 
 export class SpriteCirclularMovableObject extends MovableGameObject {
 
-    constructor(x, y, vx, vy, color, radius, imgPath) {
+    constructor(x, y, vx, vy, color, radius) {
         super(x, y,  0, 0, color, vx, vy); 
         this.radius = radius;
-        this.img = document.createElement("img");
-        this.img.src = imgPath;
     }
 
-    draw(ctx) {
+    draw(ctx, imagePath) {
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.fill();
         
-        ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
+        ctx.drawImage(document.getElementById(imagePath), this.x, this.y, this.radius, this.radius);
     }
 }
 
 export class SpriteSquareMovableObject extends MovableGameObject {
 
-    constructor(x, y, width, height, vx, vy, imgPath) {
+    constructor(x, y, width, height, vx, vy) {
         super(x, y, "red", width, height, vx, vy); //Color to test
-        this.img = document.createElement("img");
-        this.img.src = imgPath;
     }
 
-    draw(ctx) {
+    draw(ctx, imagePath) {
         /*
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -106,6 +102,6 @@ export class SpriteSquareMovableObject extends MovableGameObject {
         ctx.closePath();
         ctx.fill();
         */
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.drawImage(document.getElementById(imagePath), this.x, this.y, this.width, this.height);
     }
 }

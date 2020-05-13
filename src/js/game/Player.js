@@ -3,8 +3,9 @@ import { SpriteCirclularMovableObject } from "../GameObject.js";
 export class Player extends SpriteCirclularMovableObject {
    
     constructor(speed) {
-        super(550, 600, 0, 0, "white", 30, "src/images/firefly-placeholder.png");
+        super(550, 600, 0, 0, "white", 30);
         this.speed = speed;
+        this.image = document.getElementById("fireflyImage");
     }
 
     up(bool) {    
@@ -24,7 +25,7 @@ export class Player extends SpriteCirclularMovableObject {
     }
 
     draw(ctx) {
-       ctx.drawImage(this.img, this.x - this.radius, this.y - this.radius, this.radius * 2.5, this.radius * 2.5);
+        ctx.drawImage(this.image, this.x - this.radius, this.y - this.radius, this.radius * 2.5, this.radius * 2.5);
     }
 
     update(ctx) {
