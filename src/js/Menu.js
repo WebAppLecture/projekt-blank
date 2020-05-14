@@ -16,6 +16,8 @@ export class Menu {
     load(items, callback) {
         this.domElement.innerHTML = "";
         this.show();
+        document.querySelector(".controls").classList.remove("hidden");
+        document.querySelector(".sideHeadings").classList.remove("hidden");
 
         items.forEach(item => {
             let listElement = document.createElement("ul");

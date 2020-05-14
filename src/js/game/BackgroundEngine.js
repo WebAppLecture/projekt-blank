@@ -103,7 +103,7 @@ export class BackgroundEngine {
     }
 
     fullBorder() {
-        document.getElementById("progress").style.marginTop = "-110vh";
+        document.getElementById("progress").style.marginTop = "-220vh";
     }
 
     resetProgressBar() {

@@ -1,13 +1,14 @@
 :root {
     /* Border */
-    --glowDark: #533c0a;
-    --glowBase: #906813;
-    --glowMid: #bb8d2a;
-    --glowBright: #fac95e;
-    --glowMax: #ece1c8;
+    --glowDark: #53390a;
+    --glowBase: #ab6d10;
+    --glowMid: #e68c18;
+    --glowBright: #ffa42c;
+    --glowBrighter: #f3bb72;
+    --glowMax: #ffd59e;
 
     /* Menu */
-    --azure: #7fbbd3;
+    --azure: #b4b7ce;
 
     /* Screen */
     /* DarkBlueHorizon */
@@ -17,17 +18,32 @@
     --blueMidDark: #241c6a;
 
     /* RisingSunHorizon, only here to preview colors for horizon change in js */
-    --sun: #281996;
-    --sun: #3723d3;
-    --sun: #6450ff;
-    --sun: #8071f0;
+    --blueMid: #281996;
+    --blueMidLight: #3723d3;
+    --blueViolet: #6450ff;
+    --lilaBlassBlau: #8071f0;
 
-    --sun: #b55ce6;
-    --sun: #e65cd4;
-    --sun: #e44273;
-    --sun: #dc603b;
+    --violet: #b55ce6;
+    --violetPink: #e65cd4;
+    --redPink: #e44273;
+    --orangeStrong: #ff3a08;
 
-    --sun: #e68f48;
-    --sun: #dda63e;
-    --sun: #f7d200;
+    --orangeLight: #fb6501;
+    --yellowDarkg: #f89500;
+    --yellowBright: #ffb84e;
+
+    /* Controls */
+    --controlGold0: #7d4a06;
+    --controlGold: #93601d;
+    --controlGold1: #a56c22;
+    --controlGold2: #d58c2e;
+    --controlGold3: #ecaa54;
+    --controlDefaultBackground: #222032;
+
+    /* Grey Border */
+    --greyDark: #2c2c2c;
+    --greyBase: #393939;
+    --greyMid: #5d5d5d;
+    --greyBright: #848383;
+    --greyMax: #989898;
 }

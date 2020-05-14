@@ -3,12 +3,8 @@ export const Inputs = {
         "keys": [69, 13], //E, Enter.
         "text": "E",
     },
-    "reset": {
-        "keys": [27], //Escape.
-        "text": "menu",
-    },
-    "exit": {
-        "keys": [81], //Q.
+    "quit": {
+        "keys": [27, 81], //Q, Escape.
         "text": "Q",
     },
     "music": {
@@ -17,18 +13,18 @@ export const Inputs = {
     },
     "up": {
         "keys": [87, 38],
-        "text": "^",
+        "text": "↑",
     },
     "down": {
         "keys": [83, 40],
-        "text": "^",
+        "text": "↓",
     },
     "left": {
         "keys": [65, 37],
-        "text": "^",
+        "text": "←",
     },
     "right": {
         "keys": [68, 39],
-        "text": "^",
+        "text": "→",
     },
 };

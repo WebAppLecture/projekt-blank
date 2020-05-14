@@ -15,12 +15,11 @@ export class Starfall extends GameTemplate {
     //Add background images
     //Add white/grey progress bar
 
-    //Add level visual
+    //Update horizon colors
     //Add lightening (?)
     //Add button sound
     //Add tutorial -> controls/dropItems
     //Modify level up messages
-    //Clean up methods/classes
 
     start() {
         this.imageInitializer = new ImageInitializer();
@@ -34,7 +33,7 @@ export class Starfall extends GameTemplate {
         this.voluntaryExit = false;
     } 
 
-    transferGameStatsToBackground() {
+    passGameStatsToBackgroundEngine() {
         this.backgroundEngine.playerSpeed = this.playerSpeed;
         this.backgroundEngine.points = this.points;
         this.backgroundEngine.pointsNeeded = this.pointsNeeded;
@@ -70,7 +69,7 @@ export class Starfall extends GameTemplate {
         this.points = 0;
         this.pointsNeeded = this.basePointsNeeded * this.level;
         this.player = new Player(this.playerSpeed);
-        this.transferGameStatsToBackground();
+        this.passGameStatsToBackgroundEngine();
         this.backgroundEngine.initBackground();
         this.backgroundEngine.resetProgressBar();
     }
@@ -105,7 +104,7 @@ export class Starfall extends GameTemplate {
     update(ctx) {
         this.player.update(ctx);
         this.updateGame(ctx);
-        this.transferGameStatsToBackground();
+        this.passGameStatsToBackgroundEngine();
         let sunIsUp = this.backgroundEngine.updateBackground(ctx);
         if(sunIsUp) {
             this.gameOver = true;
@@ -173,7 +172,7 @@ export class Starfall extends GameTemplate {
                     } else if (this.items[i] instanceof AllStar) {
                         this.deleteItem(i);   
                         this.allStar = true;
-                        //this.starSound.play(); //favicon.ico not found??
+                        this.starSound.play(); //favicon.ico not found??
                         break;
                     } 
                     else if (this.items[i] instanceof Magnet) {

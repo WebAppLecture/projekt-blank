@@ -6,6 +6,7 @@
 body {
     user-select: none;
     background: var(--blueDarker);
+    overflow: hidden;
 }
 
 .centered {
@@ -27,17 +28,9 @@ body {
     background: transparent;
 }
 
-.gameName { /*Game name: Starfall*/
-    width: 100%;
-    height: 11vh;
-    font-size: 5vh;
-    text-align: center;
-    line-height: 12vh;
-    color: var(--glowBright);
-    text-shadow: .05vh .05vh 1vh var(--glowMid);
-}
-
-.outerBox { /*Border around game window, with level progress golden light is revealed*/
+.outerGlowBox
+/* .outerGreyBox */
+{ 
     width: 114vh;
     height: 74vh; 
 
@@ -47,31 +40,65 @@ body {
 
     align-items: center;
     justify-content: center;
+}
 
+.outerGlowBox { /*Border around game window, with level progress golden light is revealed*/
     background: var(--glowBase);
     box-shadow: 
-                0 0 .7vh .1vh inset var(--glowMax),
-                0 0 .7vh .1vh var(--glowMax),
+                0 0 .9vh .1vh inset var(--glowMax),
+                0 0 .9vh .5vh var(--glowMax),
 
                 0 0 1vh .4vh inset var(--glowBright),
                 0 0 1vh 1vh var(--glowBright),
 
                 0 0 1vh .7vh inset var(--glowMid),
-                0 0 1.5vh 1.6vh var(--glowMid)      
+                0 0 1.5vh 1.6vh var(--glowMid)  
 }
 
-.innerBox { /*Inner border, same size as screen, used for shadows*/
+/*
+.outerGreyBox { 
+    background: var(--glowBase);
+    box-shadow: 
+                0 0 .9vh .1vh inset var(--greyMax),
+                0 0 .9vh .5vh var(--greyMax),
+
+                0 0 1vh .4vh inset var(--greyBright),
+                0 0 1vh 1vh var(--greyBright),
+
+                0 0 1vh .7vh inset var(--greyMid),
+                0 0 1.5vh 1.6vh var(--greyMid)    
+}
+*/
+
+.innerGlowBox
+/* .innerGreyBox */
+{ 
     width: 110vh;
     height: 70vh; 
 
     margin: 2vh 0 0 2vh;
     position: absolute;
     padding: 1vh;
-
-    background: black;
-
-    box-shadow: 0 0 .5vh .3vh var(--glowDark)
 }
+
+.innerGlowBox { /*Inner border, same size as screen, used for gold shadows*/
+    background: var(--glowDark);
+    box-shadow: 0 0 1vh .5vh var(--glowMid),
+                0 0 .7vh .3vh var(--glowDark);
+}
+
+/*
+.innerGreyBox {
+    background: var(--grey);
+    box-shadow: 0 0 1vh .5vh var(--greyMid),
+                0 0 .7vh .3vh var(--greyDark);
+}
+*/
+
+/*
+<div class="outerGreyBox"></div>
+<div class="innerGreyBox"></div>      
+*/
 
 .screen { /*Game*/
     width: 110vh;
@@ -81,17 +108,16 @@ body {
     position: absolute;
 
     background: var(--blueDark);
-    box-shadow: 0 0 3vh .3vh inset var(--blueDarker),
-                0 0 1vh .1vh var(--blueDarker);
+    box-shadow: 0 0 3vh .3vh inset var(--blueDarkest),
+                0 0 1vh .1vh var(--blueDarkest);
 }
 
 .progressBox {
-    width: 200vh;
+    width: 125vh;
     height: 100vh; 
 
-    margin: -110vh 0vh 0 -70vh; /*Adjust top  margin value to display/hide gold progress bar; Values: bar fully visible at -110vh, fully hidden at -24vh */
+    margin: -110vh 0vh 0 -5vh; /*Adjust top  margin value to display/hide gold progress bar; Values: bar fully visible at -110vh, fully hidden at -24vh */
     position: absolute;
-    padding: 1vh;
 
     background: var(--blueDarker);
     box-shadow: 0 0 .5vh .5vh var(--blueDarker);
@@ -133,4 +159,3 @@ body {
     border-color: var(--azure);
     border-radius: 1vh;
 }
-

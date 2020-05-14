@@ -1,25 +1,141 @@
-.controls > * {
+.controls {
     position: absolute;
     cursor: pointer;
     color: transparent;
     text-align: center;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: lighter;
+    font-family: 'Cambria', serif;
+    font-weight: normal;
 }
 
-/*
-#music {
-    width: 6vh;
-    height: 6vh;
-
-    top: 3.5vh;
-    left: 107vh;
-
-    overflow: hidden;
-
-    border: thin;
+.controls > * {
+    width: 7vh;
+    height: 7vh;
+      
+    border-radius: 1vh;
     border-style: solid;
-    border-radius: 100%;
-    border-color: white;
+    border-color: var(--controlGold1);
+    box-shadow: 
+        0 0 1vh .5vh var(--controlGold),
+        0 0 .5vh .1vh inset var(--controlGold2), 
+        0 0 0.1vh .3vh inset var(--controlGold2);
+    
+    color: var(--glowMax);
+    background-color: var(--controlDefaultBackground);
+
+    line-height: 6vh;
+    text-align: center;
+    font-size: 3vh;
 }
-*/
+
+
+.up {
+    margin: 12vh 1vh 0vh -25.5vh;
+}
+
+.down {
+    margin: 2vh 1vh 0vh -25.5vh;
+}
+
+.left {
+    margin: -16vh 1vh 0vh -34.5vh;
+}
+
+.right {
+    margin: 2vh 1vh 0vh -16.5vh;
+}
+
+.confirm {
+    width: 20vh;
+    margin: 14vh 0vh 0vh -32.5vh;
+}
+
+.quit {
+    width: 20vh;
+    margin: 3vh 0vh 0vh -32.5vh;
+}
+
+.music {
+    border-radius: 5vh;
+    margin: 8vh 1vh 0vh -25.5vh;
+}
+
+.confirm:hover,
+.quit:hover
+.confirm:hover,
+.quit:hover,
+.music:hover,
+.up:hover,
+.down:hover,
+.left:hover,
+.right:hover {
+    color: rgb(255, 238, 205);
+    text-shadow: 0 0 0.4vh rgb(251, 226, 178);
+    
+    box-shadow: 
+    0 0 .3vh .2vh inset var(--glowBrighter), 
+    0 0 2vh .3vh var(--controlGold),
+    0 0 1.1vh .05vh var(--controlGold2),
+    0 0 .5vh .1vh inset var(--controlGold2), 
+    0 0 .7vh .3vh inset var(--controlGold3), 
+    0 0 0.1vh .3vh inset var(--controlGold2);
+} 
+
+.confirm:hover,
+.quit:hover {
+    background-image: 
+    linear-gradient(90deg, 
+    var(--controlGold), 
+    var(--controlGold2),
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold)
+    );
+}
+
+.up:hover {
+    background-image: 
+    linear-gradient(0deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.down:hover {
+    background-image: 
+    linear-gradient(180deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.right:hover {
+    background-image: 
+    linear-gradient(90deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.left:hover {
+    background-image: 
+    linear-gradient(270deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.music:hover {
+    background-image:
+    linear-gradient(90deg, 
+    var(--controlGold), 
+    var(--controlGold2),
+    var(--controlGold3),
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold)
+    );
+}

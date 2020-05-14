@@ -27,6 +27,8 @@ export class GameTemplate {
     tick(ctx) {
         if(this.gameOver) {
             this.messageScreen(ctx);
+            document.querySelector(".controls").classList.remove("hidden");
+            document.querySelector(".sideHeadings").classList.remove("hidden"); 
             return;
         }
         if(this.nextLevel) {
@@ -61,14 +63,18 @@ export class GameTemplate {
             this.startNextLevel();  
             this.bindControls();   
         }
-        if(type === "exit") {
+        if(type === "quit") {
             this.gameOverMessage();
             this.gameOver = true;
-            this.voluntaryExit = true;
+            this.voluntaryExit = true; 
+            document.querySelector(".controls").classList.remove("hidden");
+            document.querySelector(".sideHeadings").classList.remove("hidden"); 
         }
         if(this.gameOver && type === "confirm") {
             this.start();   
-            this.bindControls();  
+            this.bindControls();     
+            document.querySelector(".controls").classList.add("hidden");
+            document.querySelector(".sideHeadings").classList.add("hidden"); 
         }
         if(this.inputBinding.hasOwnProperty(type)) {
             this.inputBinding[type](active);

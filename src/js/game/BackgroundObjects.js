@@ -3,9 +3,6 @@ import { SpriteSquareMovableObject, SpriteCirclularMovableObject } from "../Game
 export class TreeRow extends SpriteSquareMovableObject {
 
     constructor(x, y, treeSpeed, imageNumber, lastRow, imageArrayLength) {
-        //if(imageNumber < imageArrayLength) this.img = document.getElementById("treeRowImage" + imageNumber);
-        //else 
-
         super(x, y, 1100, 300, 0, treeSpeed);
         this.img = document.getElementById("treeRowImage0");
 
@@ -38,10 +35,10 @@ export class TreeRow extends SpriteSquareMovableObject {
         if(lastRow) {
             ctx.save();
             ctx.globalAlpha = this.transparency; //TODO doesnt work
-            if(this.img) ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
+            ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
             ctx.restore();
         }
-        else if(this.img) ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
+        else ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
     }
 }
 

@@ -25,6 +25,8 @@ export class GameEngine {
         let modeName = this.menu.activeItem.innerText,
             mode = GameEngine.getModeByName(game, modeName);
         this.menu.hide();
+        document.querySelector(".controls").classList.add("hidden");
+        document.querySelector(".sideHeadings").classList.add("hidden");
         this.loadGame(game, mode);
     }
 
@@ -34,6 +36,8 @@ export class GameEngine {
             modes = game.MODES;
         if (modes.length === 0) {
             this.menu.hide();
+            document.querySelector(".controls").classList.add("hidden");
+            document.querySelector(".sideHeadings").classList.add("hidden");
             this.loadGame(game);
         } else {
             this.menu.load(modes, this.loadGameWithMode.bind(this, game))
