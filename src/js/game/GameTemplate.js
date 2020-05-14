@@ -25,13 +25,13 @@ export class GameTemplate {
     bindControls() {}
 
     tick(ctx) {
-        if(this.gameOver) {
+        if(this.gameOver) { 
+            this.gameOverMessage();
             this.messageScreen(ctx);
-            document.querySelector(".controls").classList.remove("hidden");
-            document.querySelector(".sideHeadings").classList.remove("hidden"); 
             return;
         }
         if(this.nextLevel) {
+            this.nextLevelMessage();
             this.messageScreen(ctx);
             return;
         }
@@ -58,23 +58,23 @@ export class GameTemplate {
     }
 
     input(type, active) {
-        if(this.nextLevel && type === "confirm") {
-            this.nextLevel = false;
-            this.startNextLevel();  
-            this.bindControls();   
+        if(type === "confirm") {
+            if(this.nextLevel) { //Start next level.
+                this.nextLevel = false;
+                this.startNextLevel();  
+                this.bindControls(); 
+            }
+            if(this.gameOver) { //Display results.
+                this.start();   
+                this.bindControls();    
+            }
         }
         if(type === "quit") {
-            this.gameOverMessage();
-            this.gameOver = true;
-            this.voluntaryExit = true; 
-            document.querySelector(".controls").classList.remove("hidden");
-            document.querySelector(".sideHeadings").classList.remove("hidden"); 
-        }
-        if(this.gameOver && type === "confirm") {
-            this.start();   
-            this.bindControls();     
-            document.querySelector(".controls").classList.add("hidden");
-            document.querySelector(".sideHeadings").classList.add("hidden"); 
+            if(!this.gameOver) { //First keydown: Stop game and display results.
+                this.gameOver = true;
+                this.voluntaryExit = true;
+            }
+            else if(active) window.gameEngine.reset(); //Second keydown: Return to start screen.
         }
         if(this.inputBinding.hasOwnProperty(type)) {
             this.inputBinding[type](active);

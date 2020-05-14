@@ -77,7 +77,6 @@ export class Starfall extends GameTemplate {
     //Modifies stats for next difficulty level.
     levelUp() {
         this.nextLevel = true;
-        this.nextLevelMessage();
     }
 
     startNextLevel() {

@@ -7,17 +7,19 @@ export class Menu {
 
     hide() {
         this.domElement.classList.add("hidden");
+        document.querySelector(".controls").classList.add("hidden");
+        document.querySelector(".sideHeadings").classList.add("hidden"); 
     }
 
     show() {
         this.domElement.classList.remove("hidden");
+        document.querySelector(".controls").classList.remove("hidden");
+        document.querySelector(".sideHeadings").classList.remove("hidden"); 
     }
 
     load(items, callback) {
         this.domElement.innerHTML = "";
         this.show();
-        document.querySelector(".controls").classList.remove("hidden");
-        document.querySelector(".sideHeadings").classList.remove("hidden");
 
         items.forEach(item => {
             let listElement = document.createElement("ul");
