@@ -1,9 +1,6 @@
-import { ImageInitializer } from "./ImageInitializer.js";
-
 export class GameTemplate {
 
     constructor(mode) {
-        this.imageLoader = new ImageInitializer();
         this.fillStyle = "white";
         this.applyMode(mode);
         this.start();
@@ -45,7 +42,7 @@ export class GameTemplate {
     draw() {}
 
     messageScreen(ctx) {
-        this.fullBorder();
+        this.backgroundEngine.fullBorder();
         let fontSize = 30;
         ctx.fillStyle = this.fillStyle;
         ctx.font = fontSize + "px monospace";

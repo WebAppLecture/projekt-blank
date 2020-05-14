@@ -1,14 +1,11 @@
-/*
-
-//Currently still in Starfall.js
-
-import { TreeRow, Sun, Moon } from "./Background.js";
+import { TreeRow, Sun, Moon } from "./BackgroundObjects.js";
 
 export class BackgroundEngine {
 
-    
-    constructor() {
-        //Variables
+    constructor(imageInitializer, playerSpeed) {
+        this.imageInitializer = imageInitializer;
+        this.initBackgroundStats();
+        this.playerSpeed = playerSpeed;
     }
 
     //Initializes background variables.
@@ -43,8 +40,8 @@ export class BackgroundEngine {
         let distance = this.lastTreePosition / this.numberOfTreeRows * 2; //Distance to next tree row.
         let positionCurrent = this.lastTreePosition;
         for(let i = this.trees.length; i < number; i++) {
-            let imageNumber = this.treeCounter % this.imageLoader.numberTreeImages; //Select tree image based on available number of variations, then repeat.
-            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false, this.imageLoader.numberTreeImages)); //Push initial.
+            let imageNumber = this.treeCounter % this.imageInitializer.numberTreeImages; //Select tree image based on available number of variations, then repeat.
+            this.trees.push(new TreeRow(-5, positionCurrent, this.treeSpeed, imageNumber, false, this.imageInitializer.numberTreeImages)); //Push initial.
             this.treeCounter++;
             positionCurrent += distance;
         }
@@ -54,8 +51,8 @@ export class BackgroundEngine {
 
     //Adds a new tree row.
     newTree() {
-        let imageNumber = this.treeCounter % this.imageLoader.numberTreeImages;
-        this.trees.unshift(new TreeRow(-5, this.lastTreePosition, this.treeSpeed, imageNumber, true, this.imageLoader.numberTreeImages)); //Unshift additional.
+        let imageNumber = this.treeCounter % this.imageInitializer.numberTreeImages;
+        this.trees.unshift(new TreeRow(-5, this.lastTreePosition, this.treeSpeed, imageNumber, true, this.imageInitializer.numberTreeImages)); //Unshift additional.
         this.treeCounter++;
     }
 
@@ -64,12 +61,12 @@ export class BackgroundEngine {
             this.moon.update(ctx);
             if(this.moon.moonDown()) {
                 this.switchSky();
+                this.sun.update();
             }
         } else {
             this.sun.update(ctx);
             if(this.sun.isUp()) {
-                this.gameOver = true;
-                this.gameOverMessage();
+                return true; //Returns true sun is up -> picked up in Starfall, leads to game over.
             }
             this.updateSunHorizonIndex();
         }
@@ -118,7 +115,7 @@ export class BackgroundEngine {
         let revealPercent = this.points / this.pointsNeeded; //Current percent of points needed.
         this.baseProgressMargin = -24; //Margin value: Progress box hides bar.
         this.progressMargin = this.baseProgressMargin - revealPercent * fullRange; //New margin value
-        document.getElementById("progress").style.marginTop = "" + this.progressMargin + "vh"; //Reveal percent of glowing border as level progress indicator.
+        document.getElementById("progress").style.marginTop = this.progressMargin + "vh"; //Reveal percent of glowing border as level progress indicator.
     }
 
     updateBackgroundStats() {
@@ -134,7 +131,6 @@ export class BackgroundEngine {
             this.sun.draw(ctx);
         }
         this.drawTrees(ctx);
-        this.drawLevel(ctx);
     }
 
     //TODO: Finetune intervals.
@@ -187,4 +183,3 @@ export class BackgroundEngine {
         }
     }
 }
-*/
