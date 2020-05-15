@@ -14,16 +14,18 @@ export class BackgroundEngine {
         this.numberOfTreeRows = 5;
         this.lastTreePosition = 250; 
         this.horizonSpeed = 1; //Movement speed modifier for sun and moon.
-        this.sunHorizonFirstIndex = 0; //Starting index for changing horizon color gradient.
+        this.risingSunIndex = 0; //Starting index for changing horizon color gradient.
 
         //Color stops for default sky.
         this.darkBlueHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a"];
 
         //Color stops for horizon change.
-        this.risingSunHorizon = ["#040120", "#06012a", "#1d1847", "#241c6a", 
+        this.risingSunColors = ["#040120", "#06012a", "#1d1847", "#241c6a", 
                                  "#281996", "#3723d3", "#6450ff", "#8071f0",
                                  "#dd5ce6", "#e25099", "#e44273", 
                                  "#ff3a08", "#fb6501", "#f89500", "#ffb84e"];
+
+        this.finalBlueSky = ["#014c82", "#1776ba", "#1f9df8", "#84c8f8"];
 
         this.calcRisingPositons();
     }
@@ -33,6 +35,8 @@ export class BackgroundEngine {
         this.treeCounter = 0; //Counts each created tree; used to keep track of which image to select for next row.
         this.initTrees(this.numberOfTreeRows);
         this.moon = new Moon(this.horizonSpeed);
+        this.opacity1 = 1; //First gradient 
+        this.opacity2 = 0; //Second gradient
     }
 
     //Initializes forest background by creating a given number of trees.
@@ -130,17 +134,21 @@ export class BackgroundEngine {
         this.drawTrees(ctx);
     }
 
-    //TODO: Fix bug violet index 6.
     //Draw sky. Constant dark blue while moon up, changing sunrise colors when sun is moving up.
     drawHorizonGradient(ctx) {
         let gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+        let gradient2 = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+
+        let blend;
+        let blendFactor = 1 / 150 * this.horizonSpeed; //Adjust blend speed for each level.
         let interval = 0.6 / 3; //Interval for 4 gradient stops (3 bec. first is at 0.0)
         
-        if(this.sun !== undefined && this.sunHorizonFirstIndex < this.risingPositions.length) {
-            this.updateSunHorizonIndex(); //Update color/position index.
+        //Update color/position index.
+        if(this.sun !== undefined && this.risingSunIndex < this.risingPositions.length) {
+            this.updateSunHorizonIndex(); 
         }
 
-        //Same sky for moon.
+        //Always same colors for moon and start sky.
         if(this.moon !== undefined || this.sunHorizonFirstIndex === 0) { 
             gradient.addColorStop(0.0, this.darkBlueHorizon[0]);
             gradient.addColorStop(interval, this.darkBlueHorizon[1]);
@@ -149,25 +157,70 @@ export class BackgroundEngine {
 
         //Sun sky changes with sun position.
         } else {
-            let stops = 4;
-            //console.log("index " + this.sunHorizonFirstIndex);
-            if(this.sunHorizonFirstIndex >= 6) {
-                stops = this.sunHorizonFirstIndex - 3; //Always at least 4 stops (including 0.0).
-                this.sunHorizonFirstIndex = 6; //Start with color at index 6, add more colors as sun rises.
+            let startIndex;
+            let stops = 4; //Min stops
+
+            if(this.risingSunIndex > 3) { 
+                if(this.risingSunIndex > 7) stops = 7; //Max stops
+                else stops = this.risingSunIndex; //Increase gradually
             }
 
+            if(this.risingSunIndex < this.risingSunColors.length - 8) {
+                startIndex = this.risingSunIndex; //Update start index
+            } else {
+                startIndex = this.risingSunColors.length - 8; //Get the last 8 colors.
+                if(this.risingSunIndex > this.risingSunColors.length - 4) blend = true;
+            }
+
+            //Create gradient.
             let gradientStop = 0.0;
-            let slicePercent = 1 / this.calculateNumberHorizonSlices(stops);
+            let slicePercent = 0.7 / this.calculateNumberHorizonSlices(stops);
             let i = 0;
-            while(gradientStop <= 0.7 && this.sunHorizonFirstIndex + i < this.risingSunHorizon.length) {
+            while(gradientStop <= 0.7 - slicePercent && startIndex + i < this.risingSunColors.length) {
                 if(this.stops === 4) gradientStop += interval;
                 else gradientStop += i * slicePercent;
-                gradient.addColorStop(gradientStop, this.risingSunHorizon[this.sunHorizonFirstIndex + i]);
+                gradient.addColorStop(gradientStop, this.risingSunColors[startIndex + i]); 
                 i++;
             }
         }
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        //Create blue sky and update opacity,
+        //draw blending gradients.
+        if(blend) {
+            gradient2.addColorStop(0.0, this.finalBlueSky[0]);
+            gradient2.addColorStop(0.1, this.finalBlueSky[1]);
+            gradient2.addColorStop(0.3, this.finalBlueSky[2]);
+            gradient2.addColorStop(0.5, this.finalBlueSky[3]);
+
+            //Draw first gradient: Changing color horizon.
+            ctx.save();
+            ctx.globalAlpha = this.opacity1;
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.restore();
+
+            //Draw second gradient: Blue sky.
+            ctx.save();
+            ctx.globalAlpha = this.opacity2;
+            ctx.fillStyle = gradient2;
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.restore();
+            console.log(this.opacity2);
+
+            this.opacity1 -= blendFactor;
+            this.opacity2 += blendFactor;  
+
+            if(this.opacity2 >= 1) {
+                blend = false;
+                gradient = gradient2;
+            }
+        }
+
+        //Simple gradient.
+        if(!blend) {
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        }        
     }
 
     //Used for proportional horizon slices, number of slices determined by number of stops.
@@ -181,10 +234,9 @@ export class BackgroundEngine {
 
     //Updates the starting color for horizon according to sun's position.
     updateSunHorizonIndex() {
-        for(let i = 1; i < this.risingPositions.length; i++) {
+        for(let i = 1; i < this.risingPositions.length - 1; i++) {
             if(this.sun.y > this.risingPositions[i]) {
-                this.sunHorizonFirstIndex = i - 1;
-                //console.log(this.risingPositions[i] + " " + (i - 1));
+                this.risingSunIndex = i - 1;
                 return;
             }
         }
@@ -195,7 +247,7 @@ export class BackgroundEngine {
         this.risingPositions = []
         let max = 120; //Per my decision: "Highest" point should be at 70 + buffer 50 for gradient
         let min = 500;
-        let interval = (min - max) / this.risingSunHorizon.length - 1;
+        let interval = (min - max) / this.risingSunColors.length - 1;
         let nextPosition = min - interval;
         while(nextPosition >= max) {
             this.risingPositions.push(nextPosition);

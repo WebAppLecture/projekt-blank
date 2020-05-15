@@ -29,7 +29,6 @@ body {
 }
 
 .outerGlowBox
-/* .outerGreyBox */
 { 
     width: 114vh;
     height: 74vh; 
@@ -55,23 +54,7 @@ body {
                 0 0 1.5vh 1.6vh var(--glowMid)  
 }
 
-/*
-.outerGreyBox { 
-    background: var(--glowBase);
-    box-shadow: 
-                0 0 .9vh .1vh inset var(--greyMax),
-                0 0 .9vh .5vh var(--greyMax),
-
-                0 0 1vh .4vh inset var(--greyBright),
-                0 0 1vh 1vh var(--greyBright),
-
-                0 0 1vh .7vh inset var(--greyMid),
-                0 0 1.5vh 1.6vh var(--greyMid)    
-}
-*/
-
 .innerGlowBox
-/* .innerGreyBox */
 { 
     width: 110vh;
     height: 70vh; 
@@ -86,19 +69,6 @@ body {
     box-shadow: 0 0 1vh .5vh var(--glowMid),
                 0 0 .7vh .3vh var(--glowDark);
 }
-
-/*
-.innerGreyBox {
-    background: var(--grey);
-    box-shadow: 0 0 1vh .5vh var(--greyMid),
-                0 0 .7vh .3vh var(--greyDark);
-}
-*/
-
-/*
-<div class="outerGreyBox"></div>
-<div class="innerGreyBox"></div>      
-*/
 
 .screen { /*Game*/
     width: 110vh;
@@ -117,7 +87,7 @@ body {
     height: 100vh; 
 
     margin: -110vh 0vh 0 -5vh; /*Adjust top  margin value to display/hide gold progress bar; 
-                              /*Values: bar + game name fully visible at -110vh, fully hidden at -24vh; game name hidden at -103vh */
+                               /*Values: bar + game name fully visible at -110vh, fully hidden at -24vh; game name hidden at -103vh */
     position: absolute;
 
     background: var(--blueDarker);
@@ -151,7 +121,6 @@ body {
     
     margin: 25vh 38vh;
 
-    /*border: .3vh solid var(--glowMax);*/
     box-shadow: 0 0 1vh .2vh var(--azure),
                 0 0 .5vh .1vh inset white;
 }

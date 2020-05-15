@@ -32,6 +32,12 @@
     --yellowDarkg: #f89500;
     --yellowBright: #ffb84e;
 
+    /* Final color */
+    --blueBright0: #014c82;
+    --blueBright0: #1776ba;
+    --blueBright0: #1f9df8;
+    --blueBright0: #84c8f8;
+
     /* Controls */
     --controlGold0: #7d4a06;
     --controlGold: #93601d;
@@ -39,6 +45,9 @@
     --controlGold2: #d58c2e;
     --controlGold3: #ecaa54;
     --controlDefaultBackground: #222032;
+
+    /* Items */
+    --orangeStrong: #d54c4c;
 
     /* Grey Border */
     --greyDark: #2c2c2c;

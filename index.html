@@ -7,6 +7,7 @@
         <div class="images" id="images"></div>
 
         <div class="centered game">
+
             <div class="sideHeadings">
                 <div class="ctrl">Controls</div>
                 <div class="desc">Items</div>
@@ -15,11 +16,11 @@
 
             <div class="outerGlowBox"></div>
             <div class="innerGlowBox"></div>
-
             <div class="progressBox" id="progress"></div>
 
             <canvas class="screen" height="700" width ="1100"></canvas>
             <nav class="menu"></nav>
+
             <nav class="controls">
                 <div class="directions up" id="up" title="Move Up"></div>
                 <div class="directions right" id="right" title="Move Right"></div>
@@ -29,6 +30,13 @@
                 <div class="quit" id="quit" title="Quit Game: Q or ESC"></div>
                 <div class="music" id="music" title="Sound: Click to Play/Mute"></div>
             </nav>
+
+            <nav class="items">
+                <div class="star" id="star" title="Catch normal stars to collect points, but be careful: when you miss them you lose points!"></div>
+                <div class="allstar" id="allstar" title="A red star catches all normal stars."></div>
+                <div class="snow" id="down" title="SNOW EFFECT"></div>
+            </nav>
+
         </div>
     </body>
     <script type="module" src="src/js/index.js"></script>

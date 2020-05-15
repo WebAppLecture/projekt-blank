@@ -3,7 +3,6 @@ import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
 import { Star, AllStar, Snow } from "./DropItems.js";
 import { Sound } from "./Sound.js";
-import { ImageInitializer } from "./ImageInitializer.js";
 import { BackgroundEngine } from "./BackgroundEngine.js";
 
 export class Starfall extends GameTemplate {
@@ -13,14 +12,11 @@ export class Starfall extends GameTemplate {
     //Finetune hitboxes
     //Add snow, jewel, clock
     //Add background images
-    //Add white/grey progress bar
     //Add lightening (?)
-    //Add tutorial -> dropItems
     //Modify level up messages
 
     start() {
-        this.imageInitializer = new ImageInitializer(); //Load all images for the game.
-        this.backgroundEngine = new BackgroundEngine(this.imageInitializer); //Create background.
+        this.backgroundEngine = new BackgroundEngine(window.imageInitializer); //Create background.
         this.initSounds(); //Initialize sounds.
         this.baseStats();
         this.firstLevel(); //Set stats for the first level.

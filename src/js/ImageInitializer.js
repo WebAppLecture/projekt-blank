@@ -1,4 +1,4 @@
-export class ImageInitializer { //Loads all images when game starts to avoid creating new image elements when creating a new instance of an item, all items of the class use the same image.
+export class ImageInitializer { //Loads all images before game starts to avoid creating new image elements when creating a new instance of an item; all items of the class use the same image.
     constructor() {
 
         this.numberTreeImages = 1;
@@ -7,7 +7,7 @@ export class ImageInitializer { //Loads all images when game starts to avoid cre
             "src/images/firefly-placeholder.png", //Player
             "src/images/star.png", //Star
             "src/images/allstar.png", //AllStar
-            "src/images/snow.png", //Magnet
+            "src/images/snow.png", //Snow
             "src/images/moon-placeholder.png", //Moon
             "src/images/sun-placeholder.png", //Sun
             "src/images/trees-placeholder.png" //TreeRow
@@ -17,7 +17,7 @@ export class ImageInitializer { //Loads all images when game starts to avoid cre
             "fireflyImage", //Player
             "starImage", //Star
             "allStarImage", //AllStar
-            "snowImage", //Magnet
+            "snowImage", //Snow
             "moonImage", //Moon
             "sunImage", //Sun
             "treeRowImage0" //TreeRow

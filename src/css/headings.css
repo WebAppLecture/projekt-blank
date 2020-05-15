@@ -1,7 +1,6 @@
 .sideHeadings > * {
     position: absolute;
-    cursor: pointer;
-    color: transparent;
+    margin-top: 15vh;
     text-align: center;
     font-family: 'Times New Roman', Times, serif;
     font-weight: lighter;
@@ -12,14 +11,11 @@
 }
 
 .ctrl { /* Controls */
-    margin-left: -80vh ;
-    margin-top: 15vh;
+    left: -80vh ;
 }
 
 .desc { /* Items */
-    left: 11vh;
-    margin-left: 70vh ;
-    margin-top: 15vh;
+    left: 80vh;
 }
 
 .gameName { /*Game name: Starfall*/

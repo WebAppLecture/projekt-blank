@@ -1,8 +1,8 @@
 .controls {
     position: absolute;
+    left: -26.5vh;
+    margin-top: 12vh;
     cursor: pointer;
-    color: transparent;
-    text-align: center;
     font-family: 'Cambria', serif;
     font-weight: normal;
 }
@@ -27,36 +27,35 @@
     font-size: 3vh;
 }
 
-
-.up {
-    margin: 12vh 1vh 0vh -25.5vh;
-}
-
 .down {
-    margin: 2vh 1vh 0vh -25.5vh;
+    margin-top: 2vh ;
 }
 
 .left {
-    margin: -16vh 1vh 0vh -34.5vh;
+    margin-left: -9.5vh;
+    margin-top: -16vh;
 }
 
 .right {
-    margin: 2vh 1vh 0vh -16.5vh;
+    margin-left: 9.5vh;
+    margin-top: 2vh;
 }
 
 .confirm {
     width: 20vh;
-    margin: 14vh 0vh 0vh -32.5vh;
+    margin-left: -7vh;
+    margin-top: 14vh;
 }
 
 .quit {
     width: 20vh;
-    margin: 3vh 0vh 0vh -32.5vh;
+    margin-left: -7vh;
+    margin-top: 3vh;
 }
 
 .music {
     border-radius: 5vh;
-    margin: 8vh 1vh 0vh -25.5vh;
+    margin-top: 5vh;
 }
 
 .confirm:active,
