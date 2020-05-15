@@ -10,32 +10,32 @@ Gina Kastner - 2090583
 
 
 ### Beschreibung ###
-Ein Glühwürmchen hat die Aufgabe, eine bestimmte Menge an Sternenlicht zu sammeln, bevor die Sonne aufgeht und die Nacht vorüber ist.
+Ein Glühwürmchen hat die Aufgabe, eine bestimmte Menge an Sternenlicht zu sammeln, bevor die Sonne aufgeht.
 
 ### Umsetzung ###
-Es werden zufällig Items generiert, die entweder Sterne, Super-Sterne oder Schneeflocken sein können. Normale Sterne geben einen Punkt und verursachen 0,5 Punkte Verlust, wenn sie nicht gefangen werden. Mit einem Super-Stern werden alle normalen Sterne, die aktuell verfügbar sind, aufgefangen. Schneeflocken frieren normale Sterne, die aufgefangen werden können, für eine kurze Zeit ein. Spezialitems haben jeweils keine Auswirkungen auf einander.
-Die Spielzeit ist abgelaufen, wenn die Sonne vollständig aufgegangen ist.
-Pro Level sind zusätzlich 10 Punkte zu erreichen, und die Geschwindigkeit der fallenden Items, aber auch des Spielers erhöht sich mit jedem Level.
+Es werden zufällig Items generiert, die entweder Sterne, Super-Sterne oder Schneeflocken sein können. Normale Sterne geben einen Punkt und verursachen 0,5 Punkte Verlust, wenn sie nicht gefangen werden. Mit einem Super-Stern werden alle normalen Sterne, die aktuell verfügbar sind, aufgefangen. Schneeflocken frieren normale Sterne, die aufgefangen werden können, für eine kurze Zeit ein. Spezialitems haben jeweils keine Auswirkungen auf einander.\
+Die Spielzeit ist abgelaufen, wenn die Sonne vollständig aufgegangen ist.\
+Pro Level sind zusätzlich 10 Punkte zu erreichen, und die Geschwindigkeit der fallenden Items, aber auch des Spielers erhöht sich mit jedem Level.\
 
 ### Steuerung ###
-Item/Steuerungshinweise am Rand des Bildschirms: mit Maus hovern, um Beschreibungen anzuzeigen
-Spiel starten: E oder Enter
-Bewegung Glühwümchen: Pfeiltasten oder W/A/S/D
-Laufendes Spiel beenden: Q oder ESC
-Zurückkehren zum Startbildschirm: Zweites Mal Q oder ESC
-Sound an/aus: M oder Button auf Startbildschirm aktivieren 
+- Item/Steuerungshinweise am Rand des Bildschirms: mit Maus hovern, um Beschreibungen anzuzeigen
+- Spiel starten: E oder Enter
+- Bewegung Glühwümchen: Pfeiltasten oder W/A/S/D
+- Laufendes Spiel beenden: Q oder ESC
+- Zurückkehren zum Startbildschirm: Zweites Mal Q oder ESC
+- Sound an/aus: M oder Button auf Startbildschirm aktivieren 
 
 ### Wichtige Klassen/Dateien ###
 JS:\
-ImageInitializer: Legt Bildelemente an, welche für jede Instanz einer Klasse wiederverwendet werden können.\
-BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon und Steuerung des Fortschrittsbalkens.\
-DropItems: Enthält die Klassen für die sammelbaren Items Star, AllStar und Snow.
-BackgroundEngine: Enthält Methoden für die Hintergrundanimation, d. h. Bewegung und Generierung der Baumreihen, Sonne, Mond und Veränderungen des Himmels.
-Starfall: Initialisierung und Ablauf des Spiels.
+- ImageInitializer: Legt Bildelemente an, welche für jede Instanz einer Klasse wiederverwendet werden können.\
+- BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon und Steuerung des Fortschrittsbalkens.\
+- DropItems: Enthält die Klassen für die sammelbaren Items Star, AllStar und Snow.\
+- BackgroundEngine: Enthält Methoden für die Hintergrundanimation, d. h. Bewegung und Generierung der Baumreihen, Sonne, Mond und Veränderungen des Himmels.\
+- Starfall: Initialisierung und Ablauf des Spiels.\
 
-CSS:
-gameScreen: Bildschirm, Menü, Goldener Rahmen und Box zur Fortschrittsanzeige
-controls und items: Tutorial-Buttons
+CSS:\
+- gameScreen: Bildschirm, Menü, Goldener Rahmen und Box zur Fortschrittsanzeige\
+- controls und items: Tutorial-Buttons und Items\
 
 ### Designentscheidungen ###
 Als Grundlage habe ich den Code der GameBox übernommen und ihn stellenweise etwas abgewandlet oder erweitert.
