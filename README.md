@@ -28,9 +28,9 @@ Pro Level sind zusätzlich 10 Punkte zu erreichen, und die Geschwindigkeit der f
 ### Wichtige Klassen/Dateien ###
 JS:
 - ImageInitializer: Legt Bildelemente an, welche für jede Instanz einer Klasse wiederverwendet werden können.
-- BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon und Steuerung des Fortschrittsbalkens.
+- BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon.
 - DropItems: Enthält die Klassen für die sammelbaren Items Star, AllStar und Snow.
-- BackgroundEngine: Enthält Methoden für die Hintergrundanimation, d. h. Bewegung und Generierung der Baumreihen, Sonne, Mond und Veränderungen des Himmels.
+- BackgroundEngine: Enthält Methoden für die Hintergrundanimation, d. h. Bewegung und Generierung der Baumreihen, Sonne, Mond, Veränderungen des Himmels und Steuerung des Fortschrittsbalkens.
 - Starfall: Initialisierung und Ablauf des Spiels.
 
 CSS:
@@ -38,7 +38,7 @@ CSS:
 - controls und items: Tutorial-Buttons und Items
 
 ### Designentscheidungen ###
-Als Grundlage habe ich den Code der GameBox übernommen und ihn stellenweise etwas abgewandlet oder erweitert.
+Als Grundlage habe ich den Code der GameBox übernommen und ihn stellenweise etwas abgewandelt oder erweitert.
 
 Man merkt vermutlich, dass meine Priorität bei diesem Spiel die grafischen Effekte waren - es hätten noch ein paar DropItems zusätzlich hinzugefügt werden können, was ich zeitlich aber nicht mehr geschafft habe.
 
