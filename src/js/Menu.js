@@ -12,9 +12,10 @@ export class Menu {
     }
 
     show() {
-        this.domElement.classList.remove("hidden"); 
-        document.querySelector(".controls").classList.remove("hidden"); //Starting screen: Show menu and tutorial.
+        this.domElement.classList.remove("hidden"); //Starting screen: Show start menu.
+        document.querySelector(".controls").classList.remove("hidden"); //Show tutorial.
         document.querySelector(".sideHeadings").classList.remove("hidden"); 
+        document.getElementById("progress").style.marginTop = "-110vh"; //Show game name; value see comment in CSS (progress box).
     }
 
     load(items, callback) {

@@ -11,14 +11,11 @@ export class Starfall extends GameTemplate {
     //TODO: 
     //Improve controls
     //Finetune hitboxes
-    //Add magnet, jewel, clock
+    //Add snow, jewel, clock
     //Add background images
     //Add white/grey progress bar
-
-    //Update horizon colors
     //Add lightening (?)
-    //Add button sound
-    //Add tutorial -> controls/dropItems
+    //Add tutorial -> dropItems
     //Modify level up messages
 
     start() {
