@@ -2,6 +2,7 @@ export class Sound { //Class for basic sound methods.
 
     constructor(audioPath) {
         this.sound = new Audio(audioPath);
+        this.isOn = false;
     }
 
     //Play from the start, stop any previous sound, so there is no overlapping -> catching AllStar.
@@ -12,18 +13,30 @@ export class Sound { //Class for basic sound methods.
     }
 
     //Play in a loop -> music.
-    playContinuous() {
+    playMusic() {
         this.sound.loop = true;
         this.sound.play();
+        this.isOn = true;
     }
 
     //Stop playing, reset starting point.
     stop() {
-        this.sound.pause();
+        this.pause();
         this.sound.currentTime = 0;
     }
 
     pause() {
         this.sound.pause();
+        this.isOn = false;
+    }
+
+    continue() {
+        this.sound.play();
+        this.isOn = true;
+    }
+
+    finishPlaying() {
+        if(this.sound.currentTime == 0) this.stop();
+        return true;
     }
 }

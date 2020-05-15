@@ -78,7 +78,7 @@ export class GameEngine {
             control.addEventListener("mousedown", this.onControlMouseDown.bind(this));
             control.addEventListener("mouseup", this.onControlMouseUp.bind(this));
         });
-        this.setupMusicButton();
+        this.musicButtonClick();
     }
 
     setupCanvas() {
@@ -86,7 +86,7 @@ export class GameEngine {
         this.screen.classList.add("on");
     }
 
-    gameLoop() {
+    gameLoop() { 
         if (this.game !== undefined) {
             requestAnimationFrame(this.gameLoop.bind(this));
             this.renderContext.clearRect(0, 0, this.screen.width, this.screen.height);
@@ -95,7 +95,7 @@ export class GameEngine {
     }
 
     //Adds event listener and "active" property to be able to style the button differtly in CSS depending on its current state.
-    setupMusicButton() {
+    musicButtonClick() {
         let button = document.getElementById("music");
         button.addEventListener("click", function() {
             if(button.classList.contains("active")) button.classList.remove("active");
@@ -108,7 +108,12 @@ export class GameEngine {
         let key = event.which;
         this.input(this.keyMapping[key], true);
     }
-
+    
+    switchSound() {
+        let button = document.getElementById("music");
+        if(button.classList.contains("active")) button.classList.remove("active");
+        else button.classList.add("active");
+    }
 
     onKeyUp(event) {
         let key = event.which;
@@ -124,13 +129,18 @@ export class GameEngine {
     }
 
     input(type, active) {
+        if(type === "music" && active) {
+            this.switchSound();
+        }
         if (this.game !== undefined) {
             if (type === "reset") {
                 this.reset();
-            } else {
+            }
+            else {
                 this.game.input(type, active);
             }
-        } else if (active && this.menuInteraction.hasOwnProperty(type)) {
+        }    
+        else if (active && this.menuInteraction.hasOwnProperty(type)) {
             this.menuInteraction[type]();
         }
     }

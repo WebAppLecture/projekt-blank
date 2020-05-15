@@ -7,13 +7,6 @@ import { BackgroundEngine } from "./BackgroundEngine.js";
 
 export class Starfall extends GameTemplate {
     
-    //TODO: 
-    //Improve controls
-    //Finetune hitboxes
-    //Add snow, jewel, clock
-    //Add background images
-    //Add lightening (?)
-
     start() {
         this.backgroundEngine = new BackgroundEngine(window.imageInitializer); //Create background.
         this.initSounds(); //Initialize sounds.
@@ -35,6 +28,10 @@ export class Starfall extends GameTemplate {
     initSounds() {
         this.music = new Sound("src/sounds/music.mp3");
         this.starSound = new Sound("src/sounds/star.mp3");
+    }
+
+    soundOn() {
+        return document.getElementById("music").classList.contains("active");
     }
 
     //Initializes base stats (final).
@@ -69,6 +66,7 @@ export class Starfall extends GameTemplate {
 
     //Modifies stats for next difficulty level.
     levelUp() {
+        if(this.soundOn()) this.music.finishPlaying();
         this.nextLevel = true;
     }
 
@@ -102,9 +100,10 @@ export class Starfall extends GameTemplate {
         let sunIsUp = this.backgroundEngine.updateBackground(ctx); //When sun has reached its "highest" point, game over applies bec. stars are not visible during daylight. 
         if(sunIsUp) {
             this.gameOver = true;
-            this.gameOverMessage();
+            this.stopGame();
         }
         this.backgroundEngine.updateProgressBar();
+        this.updateMusic();
     }
 
     updateGame(ctx) {
@@ -114,11 +113,21 @@ export class Starfall extends GameTemplate {
         else this.points = this.caught;
         if(this.points < 0) { 
             this.gameOver = true; 
-            this.gameOverMessage();
+            this.stopGame();
         }
         else if(this.points >= this.pointsNeeded) {
             this.levelUp();
         }
+
+    }
+
+    updateMusic() {
+        if(this.soundOn()) {
+            if(this.music.isOn) return;
+            else this.music.playMusic();
+        }
+        else if(!this.music.isOn) return;
+        else this.music.pause();
     }
 
     //Drops new items from the sky.
@@ -135,13 +144,17 @@ export class Starfall extends GameTemplate {
             if(positionItem <= ctx.canvas.width/2) direction = -1;
             else direction = 1;
             let randomSpawn = Math.random();
-            if(randomSpawn > 0.9) {
-                if(randomSpawn > 0.97) {
-                    this.items.push(new Snow(positionItem, direction, this.itemSpeed)) //3% drop chance
-                } else {
-                    this.items.push(new AllStar(positionItem, direction, this.itemSpeed)); // 7% drop chance
-                }
-            } else this.items.push(new Star(positionItem, direction, this.itemSpeed)); //default drop
+            //Create a new drop item based on random number:
+            if(randomSpawn > 0.93) {
+                this.items.push(new AllStar(positionItem, direction, this.itemSpeed)) //7% drop chance
+                return;
+            } 
+            else if(randomSpawn > 0.90) {
+                this.items.push(new Snow(positionItem, direction, this.itemSpeed)); //3% drop chance
+                return;
+            }
+            //ADD CLOCK, JEWEL
+            this.items.push(new Star(positionItem, direction, this.itemSpeed)); //Default drop
         }
     }
 
@@ -167,7 +180,7 @@ export class Starfall extends GameTemplate {
                     } else if (this.items[i] instanceof AllStar) {
                         this.deleteItem(i);   
                         this.allStar = true;
-                        this.starSound.play(); //Console error: favicon.ico not found?? 
+                        if(this.soundOn()) this.starSound.play(); //Console error when this line is active: favicon.ico not found? 
                         break;
                     } 
                     else if (this.items[i] instanceof Snow) {
@@ -201,13 +214,11 @@ export class Starfall extends GameTemplate {
         this.allStar = false;
     }
 
-    //TODO
     snowEffect() {
         for(let i = 0; i < this.items.length; i++) {
             if(this.items[i] instanceof Star && this.items[i].catchable && !this.items[i].frozen) { //Only applies to catchable, not already affected normal stars.
                 this.items[i].frozen = true;
                 this.items[i].releaseCounter = 100; //Update cycles until effect lifted.
-                this.vy *= 0.8;
             }
         }
         this.snow = false;
@@ -220,9 +231,9 @@ export class Starfall extends GameTemplate {
     //Message shown between level stages.
     nextLevelMessage() {
         if(this.nextLevel === true) { 
-            if(this.level < 4) this.message = ["Well done!"];
-            else if(this.level < 7) this.message = ["Great job!"];
-            else this.message = ["Amazing collection!"];
+            if(this.level < 3) this.message = ["Well done!"];
+            else if(this.level < 5) this.message = ["Great job!"];
+            else this.message = ["!"];
             this.message.push("\n", "\n", "Ready for level " + (this.level + 1) + "?", "\n", "\n", "Next Level: Enter");
         }
     }
@@ -239,11 +250,16 @@ export class Starfall extends GameTemplate {
             else {
                 if(this.level > 3) this.message.push("Well done!", "\n"); 
                 else if(this.level > 5) this.message.push("Great job!", "\n");
-                else if(this.level > 7) this.message = ["Amazing collection!"];
+                else if(this.level > 7) this.message = ["Flying master!"];
             }
             
             this.message.push("New Game: Enter")
         }
+    }
+
+    stopGame() {
+        if(this.soundOn()) this.music.finishPlaying();
+        this.gameOverMessage();
     }
 
     draw(ctx) {

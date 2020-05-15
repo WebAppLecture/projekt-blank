@@ -1,16 +1,16 @@
-export class ImageInitializer { //Loads all images before game starts to avoid creating new image elements when creating a new instance of an item; all items of the class use the same image.
+export class ImageInitializer { //Loads all images before game starts to avoid creating new image elements when creating a new instance of an item.
     constructor() {
 
         this.numberTreeImages = 1;
         
         this.sources = [
-            "src/images/firefly-placeholder.png", //Player
+            "src/images/firefly.png", //Player
             "src/images/star.png", //Star
             "src/images/allstar.png", //AllStar
             "src/images/snow.png", //Snow
-            "src/images/moon-placeholder.png", //Moon
-            "src/images/sun-placeholder.png", //Sun
-            "src/images/trees-placeholder.png" //TreeRow
+            "src/images/moon.png", //Moon
+            "src/images/sun.png", //Sun
+            "src/images/trees.png" //TreeRow
         ]
 
         this.idTags = [

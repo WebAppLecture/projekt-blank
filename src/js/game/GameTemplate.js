@@ -5,7 +5,7 @@ export class GameTemplate {
         this.applyMode(mode);
         this.start();
         this.bindControls();
-        }
+    }
 
     applyMode(mode) {
         if(!mode) {
@@ -16,9 +16,7 @@ export class GameTemplate {
         });
     }
 
-    gameOverMessage() {
-        this.message = ["GAME OVER", " ", "Restart: E"];
-    }
+    stopGame() {}
 
     start() {}
 
@@ -26,7 +24,7 @@ export class GameTemplate {
 
     tick(ctx) {
         if(this.gameOver) { 
-            this.gameOverMessage();
+            this.stopGame();
             this.messageScreen(ctx);
             return;
         }
@@ -58,13 +56,6 @@ export class GameTemplate {
         }); 
     }
 
-    //Plays music on repeat.
-    playMusic () {
-        let button = document.getElementById("music");
-        if(button.classList.contains("active")) this.music.playContinuous();
-        else this.music.stop();
-    }
-
     input(type, active) {
         if(type === "confirm") {
             if(this.nextLevel) { //Start next level when user confirms.
@@ -72,18 +63,21 @@ export class GameTemplate {
                 this.startNextLevel();  
                 this.bindControls(); 
             }
-            if(this.gameOver) { //Display results when game over.
+            else if(this.gameOver) { //Display results when game over.
                 this.start();   
                 this.bindControls();    
             }
+            this.music.stop();
         }
-        if(type === "quit") {
+        else if(type === "quit") {
             if(!this.gameOver) { //First keydown: Stop game and display results.
                 this.gameOver = true;
                 this.voluntaryExit = true;
-                this.music.stop();
             }
-            else if(active) window.gameEngine.reset(); //Second keydown: Return to start screen.
+            else if(active) { //Second keydown: Return to start screen.
+                window.gameEngine.reset(); 
+            }
+            this.music.stop();
         }
         if(this.inputBinding.hasOwnProperty(type)) {
             this.inputBinding[type](active);

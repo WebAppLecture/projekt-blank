@@ -26,18 +26,10 @@ export class DropItem extends SpriteCirclularMovableObject { //Base class for al
     }
 
     update(ctx) {
-        if(this.frozen) { //Apply frozen effect on an item.
-            this.releaseCounter--; //Counter to lift frozen effect -> decremented with each update()-call.
-            if(this.releaseCounter <= 0) {
-                this.frozen = false;
-            }
-        }
-        else {
-             //Items increase in size and speed while falling.
-            this.radius += this.vy * this.sizeFactor;
-            this.vx *= 1.005;
-            this.vy *= 1.004
-        }
+        //Items increase in size and speed while falling.
+        this.radius += this.vy * this.sizeFactor;
+        this.vx *= 1.005;
+        this.vy *= 1.004
         if(this.radius >= this.catchableSize) this.catchable = true; //Become catchable at certain size.
         super.update(ctx); //Move item.
     }
@@ -52,6 +44,15 @@ export class Star extends DropItem { //Basic star, needs to be collected to gain
     
     constructor(x, direction, itemSpeed) {
         super(x, direction, itemSpeed, "#fac95e", 10, 0.05, "starImage");
+    }
+
+    update(ctx) {
+        if(this.frozen) { //Apply frozen effect on an item.
+            this.releaseCounter--; //Counter to lift frozen effect -> decremented with each update()-call.
+            if(this.releaseCounter <= 0) {
+                this.frozen = false;
+            }
+        } else super.update(ctx);
     }
 
     draw(ctx) {
@@ -72,7 +73,7 @@ export class AllStar extends DropItem { //Special item: All normal stars current
     }
 }
 
-export class Snow extends DropItem { //Special item: //SOME EFFECT
+export class Snow extends DropItem { //Special item: //Freezes catchable stars: Items stop moving for a certain time.
     constructor(x, direction, itemSpeed) {
         super(x, direction, itemSpeed, "white", 5, 0.03, "snowImage");
     }
