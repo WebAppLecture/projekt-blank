@@ -26,9 +26,9 @@ Zurückkehren zum Startbildschirm: Zweites Mal Q oder ESC
 Sound an/aus: M oder Button auf Startbildschirm aktivieren 
 
 ### Wichtige Klassen/Dateien ###
-JS:
-ImageInitializer: Legt Bildelemente an, welche für jede Instanz einer Klasse wiederverwendet werden können.
-BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon und Steuerung des Fortschrittsbalkens.
+JS:\
+ImageInitializer: Legt Bildelemente an, welche für jede Instanz einer Klasse wiederverwendet werden können.\
+BackgroundObjects: Enthält die Klassen der beweglichen Hintergrundobjekte TreeRow, Sun und Moon und Steuerung des Fortschrittsbalkens.\
 DropItems: Enthält die Klassen für die sammelbaren Items Star, AllStar und Snow.
 BackgroundEngine: Enthält Methoden für die Hintergrundanimation, d. h. Bewegung und Generierung der Baumreihen, Sonne, Mond und Veränderungen des Himmels.
 Starfall: Initialisierung und Ablauf des Spiels.
