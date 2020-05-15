@@ -25,7 +25,7 @@ export class GameEngine {
         let modeName = this.menu.activeItem.innerText,
             mode = GameEngine.getModeByName(game, modeName);
         this.menu.hide();
-        document.querySelector(".controls").classList.add("hidden");
+        document.querySelector(".controls").classList.add("hidden"); //Query selector to access HTML element only by class (no id). 
         document.querySelector(".sideHeadings").classList.add("hidden");
         this.loadGame(game, mode);
     }
@@ -82,6 +82,7 @@ export class GameEngine {
             control.addEventListener("mousedown", this.onControlMouseDown.bind(this));
             control.addEventListener("mouseup", this.onControlMouseUp.bind(this));
         });
+        this.setupMusicButton();
     }
 
     setupCanvas() {
@@ -95,6 +96,15 @@ export class GameEngine {
             this.renderContext.clearRect(0, 0, this.screen.width, this.screen.height);
             this.game.tick(this.renderContext);
         }
+    }
+
+    //Adds event listener and "active" property to be able to style the button differtly in CSS depending on its current state.
+    setupMusicButton() {
+        let button = document.getElementById("music");
+        button.addEventListener("click", function() {
+            if(button.classList.contains("active")) button.classList.remove("active");
+            else button.classList.add("active");
+        });
     }
 
     onKeyDown(event) {

@@ -7,13 +7,13 @@ export class Menu {
 
     hide() {
         this.domElement.classList.add("hidden");
-        document.querySelector(".controls").classList.add("hidden");
+        document.querySelector(".controls").classList.add("hidden"); //Game: Hide menu screen and tutorial.
         document.querySelector(".sideHeadings").classList.add("hidden"); 
     }
 
     show() {
-        this.domElement.classList.remove("hidden");
-        document.querySelector(".controls").classList.remove("hidden");
+        this.domElement.classList.remove("hidden"); 
+        document.querySelector(".controls").classList.remove("hidden"); //Starting screen: Show menu and tutorial.
         document.querySelector(".sideHeadings").classList.remove("hidden"); 
     }
 

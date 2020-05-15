@@ -20,7 +20,7 @@
         0 0 0.1vh .3vh inset var(--controlGold2);
     
     color: var(--glowMax);
-    background-color: var(--controlDefaultBackground);
+    background-color: var(--blueDarker);
 
     line-height: 6vh;
     text-align: center;
@@ -63,7 +63,7 @@
 .quit:hover
 .confirm:hover,
 .quit:hover,
-.music:hover,
+.music.active,
 .up:hover,
 .down:hover,
 .left:hover,
@@ -128,7 +128,21 @@
     );
 }
 
-.music:hover {
+.music.hover {
+    box-shadow: 
+    0 0 2vh .3vh var(--controlGold),
+    0 0 1.1vh .05vh var(--controlGold2),
+    0 0 .5vh .1vh inset var(--controlGold2), 
+    0 0 .7vh .3vh inset var(--controlGold3), 
+    0 0 0.1vh .3vh inset var(--controlGold2);
+}
+
+.music:hover,
+.music.active {
+    color: rgb(255, 238, 205);
+    text-shadow: 0 0 0.4vh rgb(251, 226, 178);
+
+
     background-image:
     linear-gradient(90deg, 
     var(--controlGold), 

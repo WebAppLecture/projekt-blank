@@ -43,6 +43,7 @@ export class GameTemplate {
 
     draw() {}
 
+    //Modified gameOverScreen to be applicable to all kinds of messages.
     messageScreen(ctx) {
         this.backgroundEngine.fullBorder();
         let fontSize = 30;
@@ -57,14 +58,21 @@ export class GameTemplate {
         }); 
     }
 
+    //Plays music on repeat.
+    playMusic () {
+        let button = document.getElementById("music");
+        if(button.classList.contains("active")) this.music.playContinuous();
+        else this.music.stop();
+    }
+
     input(type, active) {
         if(type === "confirm") {
-            if(this.nextLevel) { //Start next level.
+            if(this.nextLevel) { //Start next level when user confirms.
                 this.nextLevel = false;
                 this.startNextLevel();  
                 this.bindControls(); 
             }
-            if(this.gameOver) { //Display results.
+            if(this.gameOver) { //Display results when game over.
                 this.start();   
                 this.bindControls();    
             }
@@ -73,6 +81,7 @@ export class GameTemplate {
             if(!this.gameOver) { //First keydown: Stop game and display results.
                 this.gameOver = true;
                 this.voluntaryExit = true;
+                this.music.stop();
             }
             else if(active) window.gameEngine.reset(); //Second keydown: Return to start screen.
         }

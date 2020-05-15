@@ -1,18 +1,18 @@
 import { SpriteCirclularMovableObject } from "../GameObject.js";
 
-export class DropItem extends SpriteCirclularMovableObject {
+export class DropItem extends SpriteCirclularMovableObject { //Base class for all items that are falling from the sky.
     
     constructor(x, direction, dropSpeed, color, catchableSize, sizeFactor, imageID) {
         super(x, 40, Math.random() * dropSpeed/2 * direction, dropSpeed + 0.3, color, 0);
         this.catchableSize = catchableSize;
         this.sizeFactor = sizeFactor;
-        this.increase = true;
         this.catchable = false;
-        this.image = document.getElementById(imageID);
+        //this.maxSize = maxSize;
+        this.image = document.getElementById(imageID); //Each item is represented by an image, see ImageInitializer.
     }
 
     draw(ctx) {
-        //Catchable items start to shine:
+        //Catchable items start to shine.
         if(this.catchable) {
             ctx.fillStyle = this.color;
             ctx.filter = "blur(10px)";
@@ -22,17 +22,24 @@ export class DropItem extends SpriteCirclularMovableObject {
             ctx.fill();
             ctx.filter ="none";
         }
-        //Add draw image individually for each class.
+        //Extension subclasses: Draw image.
     }
 
     update(ctx) {
-        if(this.increase) {
+        if(this.frozen) { //Apply frozen effect on an item.
+            this.releaseCounter--; //Counter to lift frozen effect -> decremented with each update()-call.
+            if(this.releaseCounter <= 0) {
+                this.frozen = false;
+            }
+        }
+        else {
+             //Items increase in size and speed while falling.
             this.radius += this.vy * this.sizeFactor;
             this.vx *= 1.005;
             this.vy *= 1.004
-            if(this.radius >= this.catchableSize) this.catchable = true;
-        } 
-        super.update(ctx);
+        }
+        if(this.radius >= this.catchableSize) this.catchable = true; //Become catchable at certain size.
+        super.update(ctx); //Move item.
     }
 
     //Item has fully passed border (used for deleting items).
@@ -41,7 +48,7 @@ export class DropItem extends SpriteCirclularMovableObject {
     }
 }
 
-export class Star extends DropItem {
+export class Star extends DropItem { //Basic star, needs to be collected to gain points.
     
     constructor(x, direction, itemSpeed) {
         super(x, direction, itemSpeed, "#fac95e", 10, 0.05, "starImage");
@@ -53,7 +60,7 @@ export class Star extends DropItem {
     }
 }
 
-export class AllStar extends DropItem {
+export class AllStar extends DropItem { //Special item: All normal stars currently in the game are collected when caught. Does not apply to other special items, no point increase.
 
     constructor(x, direction, itemSpeed) {
         super(x, direction, itemSpeed, "#ce4750", 5, 0.03, "allStarImage");
@@ -65,27 +72,17 @@ export class AllStar extends DropItem {
     }
 }
 
-export class Magnet extends DropItem {
+export class Snow extends DropItem { //Special item: //SOME EFFECT
     constructor(x, direction, itemSpeed) {
-        super(x, direction, itemSpeed, "white", 5, 0.03, "magnetImage");
-        this.angle = 0;
+        super(x, direction, itemSpeed, "white", 5, 0.03, "snowImage");
     }
 
     update(ctx) {
         super.update(ctx);
-        this.angle %= 360; //Ensure value between 0 and 360.
-        this.angle += 5; 
     }
 
     draw(ctx) {
         super.draw(ctx);
-        /*
-        ctx.save(); //Supposed to rotate around its own axis, currently doesn't work.
-        ctx.translate(this.x + this.radius / 2,this.y + this.radius / 2);
-        ctx.rotate(this.angle * Math.PI / 180);
-        ctx.drawImage(this.img, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
-        ctx.restore();
-        */
-       ctx.drawImage(this.image, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3);
+       ctx.drawImage(this.image, this.x - this.radius * 1.55, this.y - this.radius * 1.55, this.radius * 3, this.radius * 3.5);
     }
 }

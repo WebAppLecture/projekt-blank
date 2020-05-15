@@ -1,7 +1,7 @@
 import { GameObject } from "../GameObject.js";
 import { GameTemplate} from "./GameTemplate.js";
 import { Player } from "./Player.js";
-import { Star, AllStar, Magnet } from "./DropItems.js";
+import { Star, AllStar, Snow } from "./DropItems.js";
 import { Sound } from "./Sound.js";
 import { ImageInitializer } from "./ImageInitializer.js";
 import { BackgroundEngine } from "./BackgroundEngine.js";
@@ -22,17 +22,18 @@ export class Starfall extends GameTemplate {
     //Modify level up messages
 
     start() {
-        this.imageInitializer = new ImageInitializer();
-        this.backgroundEngine = new BackgroundEngine(this.imageInitializer);
-        this.initSounds();
+        this.imageInitializer = new ImageInitializer(); //Load all images for the game.
+        this.backgroundEngine = new BackgroundEngine(this.imageInitializer); //Create background.
+        this.initSounds(); //Initialize sounds.
         this.baseStats();
-        this.firstLevel();
-        this.player = new Player(this.playerSpeed);
+        this.firstLevel(); //Set stats for the first level.
+        this.player = new Player(this.playerSpeed); 
         this.gameOver = false;
-        this.nextLevel = false;
-        this.voluntaryExit = false;
+        this.nextLevel = false; //Used to display screen for next level.
+        this.voluntaryExit = false; //Used to differentiate messages for player lost/left the game.
     } 
 
+    //Passes game stats to background to enable speed control and progress indication.
     passGameStatsToBackgroundEngine() {
         this.backgroundEngine.playerSpeed = this.playerSpeed;
         this.backgroundEngine.points = this.points;
@@ -40,6 +41,7 @@ export class Starfall extends GameTemplate {
     }
 
     initSounds() {
+        this.music = new Sound("src/sounds/music.mp3");
         this.starSound = new Sound("src/sounds/star.mp3");
     }
 
@@ -47,9 +49,8 @@ export class Starfall extends GameTemplate {
     baseStats() {
         this.baseSpeed = 6; 
         this.starSpawnModifier = 0.15;
-        //this.starDriftFactor = 0; 
         this.basePointsNeeded = 10; //Points needed per level.
-        this.baseLostPenalty = 0.5; //Percentage point deduction for lost stars.
+        this.baseLostPenalty = 0.5; //Percentage point deduction for each lost star.
     }
 
     //Set stats for first level.
@@ -64,14 +65,14 @@ export class Starfall extends GameTemplate {
     //Reset current game progress.
     reset() {
         this.items = [];
-        this.lost = 0;
+        this.lost = -3; //Set to -3 to give player a "buffer" at the beginning of each level. Otherwise missing the first star results in immediate game over.
         this.caught = 0;
         this.points = 0;
         this.pointsNeeded = this.basePointsNeeded * this.level;
-        this.player = new Player(this.playerSpeed);
-        this.passGameStatsToBackgroundEngine();
-        this.backgroundEngine.initBackground();
-        this.backgroundEngine.resetProgressBar();
+        this.player = new Player(this.playerSpeed); //Reset player to start at the same position each level.
+        this.passGameStatsToBackgroundEngine(); //Pass updated stats to background.
+        this.backgroundEngine.initBackground(); //Create background.
+        this.backgroundEngine.resetProgressBar(); //Reset progress indicator.
     }
 
     //Modifies stats for next difficulty level.
@@ -79,12 +80,14 @@ export class Starfall extends GameTemplate {
         this.nextLevel = true;
     }
 
+    //Called when user confirms the next level: Updates game difficulty, background and resets game state.
     startNextLevel() {
         this.updateGameStats();
         this.backgroundEngine.updateBackgroundStats();
         this.reset();
     }
 
+    //Increase game speed for each level.
     updateGameStats() {
         this.level++;
         this.playerSpeed *= 1.1;
@@ -104,7 +107,7 @@ export class Starfall extends GameTemplate {
         this.player.update(ctx);
         this.updateGame(ctx);
         this.passGameStatsToBackgroundEngine();
-        let sunIsUp = this.backgroundEngine.updateBackground(ctx);
+        let sunIsUp = this.backgroundEngine.updateBackground(ctx); //When sun has reached its "highest" point, game over applies bec. stars are not visible during daylight. 
         if(sunIsUp) {
             this.gameOver = true;
             this.gameOverMessage();
@@ -115,8 +118,9 @@ export class Starfall extends GameTemplate {
     updateGame(ctx) {
         this.dropItem(ctx);
         this.updateItems(ctx);
-        this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
-        if(this.points < 0) {
+        if(this.lost >= 0) this.points = this.caught - this.lost * this.lostPenalty; //Calculate current points.
+        else this.points = this.caught;
+        if(this.points < 0) { 
             this.gameOver = true; 
             this.gameOverMessage();
         }
@@ -141,7 +145,7 @@ export class Starfall extends GameTemplate {
             let randomSpawn = Math.random();
             if(randomSpawn > 0.9) {
                 if(randomSpawn > 0.97) {
-                    this.items.push(new Magnet(positionItem, direction, this.itemSpeed)) //3% drop chance
+                    this.items.push(new Snow(positionItem, direction, this.itemSpeed)) //3% drop chance
                 } else {
                     this.items.push(new AllStar(positionItem, direction, this.itemSpeed)); // 7% drop chance
                 }
@@ -156,7 +160,7 @@ export class Starfall extends GameTemplate {
             //Border
             //Count lost stars and delete all lost items.
             if(this.items[i].itemBorderPassed(ctx)) {
-                if(this.items[i] instanceof Star) { //Only missed stars cause point loss; special items don't count.
+                if(this.items[i] instanceof Star) { //Only missed normal stars cause point loss; special items don't count.
                     this.lost++; 
                 }
                 this.deleteItem(i);
@@ -167,28 +171,34 @@ export class Starfall extends GameTemplate {
                 if(GameObject.circleCollision(this.player, this.items[i])) {
                     if(this.items[i] instanceof Star) {
                         this.deleteItem(i);   
-                        this.caught++;
+                        this.caught++; //Normal stars give points.
                     } else if (this.items[i] instanceof AllStar) {
                         this.deleteItem(i);   
                         this.allStar = true;
-                        this.starSound.play(); //favicon.ico not found??
+                        this.starSound.play(); //Console error: favicon.ico not found?? 
                         break;
                     } 
-                    else if (this.items[i] instanceof Magnet) {
+                    else if (this.items[i] instanceof Snow) {
                         this.deleteItem(i);   
-                        this.magnet = true;
+                        this.snow = true;
                     }
+                }
+                //Delete stars that have surpassed maxSize.
+                if(this.items[i].size >= this.items[i].maxSize) {
+                    this.deleteItem(i);
                 }
             }
         }
+        //If special item caught, apply special effects.
         if(this.allStar) { 
             this.allStarEffect();
         }
-        if(this.magnet) { 
-            this.magnetEffect(); 
+        if(this.snow) { 
+            this.snowEffect(); 
         }
     }
 
+    //All normal stars are "caught" and added to point tally. Does not apply to other special items.
     allStarEffect() {
         for(let i = this.items.length - 1; i >= 0; i--) {
             if(this.items[i] instanceof Star) {
@@ -199,24 +209,33 @@ export class Starfall extends GameTemplate {
         this.allStar = false;
     }
 
-    magnetEffect() {
-        //Add magnet effect.
-        this.magnet = false;
+    //TODO
+    snowEffect() {
+        for(let i = 0; i < this.items.length; i++) {
+            if(this.items[i] instanceof Star && this.items[i].catchable && !this.items[i].frozen) { //Only applies to catchable, not already affected normal stars.
+                this.items[i].frozen = true;
+                this.items[i].releaseCounter = 100; //Update cycles until effect lifted.
+                this.vy *= 0.8;
+            }
+        }
+        this.snow = false;
     }
 
     deleteItem(index) {
         this.items.splice(index, 1);
     }
 
+    //Message shown between level stages.
     nextLevelMessage() {
         if(this.nextLevel === true) { 
             if(this.level <= 3) this.message = ["Well done!"];
-            else if(this.level <= 5) this.message = ["Great job!"];
-            else if(this.level >= 6) this.message = ["Amazing flying skills!"];
+            else if(this.level <= 6) this.message = ["Great job!"];
+            else if(this.level >= 8) this.message = ["Master catcher!"];
             this.message.push(" ", " ", "Ready for level " + (this.level + 1) + "?", " ", "Next Level: Enter");
         }
     }
 
+    //Message shown at game over or when player exited game.
     gameOverMessage() {
         if(this.gameOver === true) {
             if(this.voluntaryExit) this.message = ["EXITED GAME"];
@@ -246,6 +265,7 @@ export class Starfall extends GameTemplate {
         }  
     }
 
+    //Level indicator in the top right corner.
     drawLevel(ctx) {
         let fontSize = 30;
         ctx.fillStyle = this.fillStyle;

@@ -2,7 +2,7 @@ import { SpriteSquareMovableObject, SpriteCirclularMovableObject } from "../Game
 
 export class TreeRow extends SpriteSquareMovableObject {
 
-    constructor(x, y, treeSpeed, imageNumber, lastRow, imageArrayLength) {
+    constructor(x, y, treeSpeed, imageNumber, lastRow, imageArrayLength) { //imageNumber, imageArrayLength to select from an array of different looking tree rows; currently not implemented.
         super(x, y, 1100, 300, 0, treeSpeed);
         this.img = document.getElementById("treeRowImage0");
 
@@ -19,7 +19,7 @@ export class TreeRow extends SpriteSquareMovableObject {
     }
 
     update(ctx, index, speed) {
-        let changeX = this.initialDrawWidth * speed/6 * 0.0015 * index ;
+        let changeX = this.initialDrawWidth * speed/6 * 0.0015 * index ; //Trees get bigger as they move closer to the "front".
         let changeY = this.initialDrawHeight * speed/6 * 0.0005 * index;
         //if(!this.lastRow) {
             this.drawWidth += changeX; 
@@ -34,7 +34,8 @@ export class TreeRow extends SpriteSquareMovableObject {
     draw(ctx, lastRow) {
         if(lastRow) {
             ctx.save();
-            ctx.globalAlpha = this.transparency; //TODO doesnt work
+            ctx.globalAlpha = this.transparency; //TODO doesnt work; 
+                                                 //Idea: When last row starts to move forward, another blends in behind it to create a smooth transition (like appearing out of fog in the distance).
             ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
             ctx.restore();
         }
@@ -42,7 +43,7 @@ export class TreeRow extends SpriteSquareMovableObject {
     }
 }
 
-export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject {
+export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject { ////Movable object, represented by picture; shape: circle; also moves in a circle.
     constructor(startX, startY, radius, circ) { 
         super(startX, startY, 0, 0, "transparent", radius);
         this.startX = startX;
@@ -56,10 +57,11 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
     update(ctx) {
         this.angle -= Math.acos((1 - Math.pow(this.speed / this.circ, 2) / 4)); 
         this.x = 1.0 * (this.startX + this.circ * Math.cos(this.angle)); 
-        this.y = 1.5 * (this.startY + this.circ * Math.sin(this.angle));//Factor > 1: Ellipsis, stretched in y-direction
+        this.y = 1.5 * (this.startY + this.circ * Math.sin(this.angle)); //Factor > 1: Ellipsis, stretched in y-direction
         super.update(ctx);
     }
 
+    //Draws image according to passed imagID (HTML image element id -> see ImageInitializer).
     draw(ctx, imageID) {
         this.img = document.getElementById(imageID);
         ctx.drawImage(this.img, this.x, this.y, this.radius, this.radius);
@@ -69,12 +71,12 @@ export class CirculatingSpriteMovableObject extends SpriteCirclularMovableObject
 
 export class Moon extends CirculatingSpriteMovableObject {
     constructor(speed) {
-        //super(300, 600, 200, -400, "src/images/moon-placeholder.png"); //without transform
         super(150, 270, 200, -250);
         this.angle = -4.5;
         this.speed = speed * 1;
     }
 
+    //Draw moon, image slightly rotated to the right.
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x + this.radius/2, this.y + this.radius/2);
@@ -103,7 +105,7 @@ export class Sun extends CirculatingSpriteMovableObject {
 
     update(ctx) {
         super.update(ctx);
-        //console.log(this.angle);
+        //console.log(this.angle); //Find correct starting position.
         //console.log(this.y); //Find values for horizon change.
     }
 

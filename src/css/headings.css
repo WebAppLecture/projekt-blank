@@ -11,12 +11,12 @@
     text-shadow: 0.1vh 0.1vh 1vh var(--glowBright);
 }
 
-.ctrl {
+.ctrl { /* Controls */
     margin-left: -80vh ;
     margin-top: 15vh;
 }
 
-.desc {
+.desc { /* Items */
     left: 11vh;
     margin-left: 70vh ;
     margin-top: 15vh;

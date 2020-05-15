@@ -1,6 +1,6 @@
 import { SpriteCirclularMovableObject } from "../GameObject.js";
 
-export class Player extends SpriteCirclularMovableObject {
+export class Player extends SpriteCirclularMovableObject { //Player represented by an image of a firefly.
    
     constructor(speed) {
         super(550, 600, 0, 0, "white", 30);

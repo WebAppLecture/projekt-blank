@@ -38,24 +38,6 @@ export class GameObject {
     }
 }
 
-export class StrokedObject extends GameObject {
-
-    constructor(x, y, width, height, color, lineWidth) {
-        super(x, y, width, height, color);
-        this.lineWidth = lineWidth;
-    }
-
-    draw(ctx) {
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.lineWidth;
-        ctx.strokeRect(
-            this.x + this.lineWidth/2, 
-            this.y + this.lineWidth/2, 
-            this.width - this.lineWidth, 
-            this.height - this.lineWidth);
-    }
-}
-
 export class MovableGameObject extends GameObject {
 
     constructor(x, y, width, height, color, vx, vy) {
@@ -70,7 +52,7 @@ export class MovableGameObject extends GameObject {
     }
 }
 
-export class SpriteCirclularMovableObject extends MovableGameObject {
+export class SpriteCirclularMovableObject extends MovableGameObject { //Movable object, represented by picture; shape: circle.
 
     constructor(x, y, vx, vy, color, radius) {
         super(x, y,  0, 0, color, vx, vy); 
@@ -88,7 +70,7 @@ export class SpriteCirclularMovableObject extends MovableGameObject {
     }
 }
 
-export class SpriteSquareMovableObject extends MovableGameObject {
+export class SpriteSquareMovableObject extends MovableGameObject { //Movable object, represented by picture; shape: rectangle.
 
     constructor(x, y, width, height, vx, vy) {
         super(x, y, "red", width, height, vx, vy); //Color to test

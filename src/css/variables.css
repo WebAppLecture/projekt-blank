@@ -17,17 +17,17 @@
     --blueDark: #1d1847;
     --blueMidDark: #241c6a;
 
-    /* RisingSunHorizon, only here to preview colors for horizon change in js */
+    /* RisingSunHorizon, not used in CSS styling only here to preview colors for horizon change in js */
     --blueMid: #281996;
     --blueMidLight: #3723d3;
     --blueViolet: #6450ff;
     --lilaBlassBlau: #8071f0;
 
-    --violet: #b55ce6;
-    --violetPink: #e65cd4;
+    --violet: #dd5ce6;
+    --betweenPink: #e25099;
     --redPink: #e44273;
+    
     --orangeStrong: #ff3a08;
-
     --orangeLight: #fb6501;
     --yellowDarkg: #f89500;
     --yellowBright: #ffb84e;

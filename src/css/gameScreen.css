@@ -116,7 +116,8 @@ body {
     width: 125vh;
     height: 100vh; 
 
-    margin: -110vh 0vh 0 -5vh; /*Adjust top  margin value to display/hide gold progress bar; Values: bar fully visible at -110vh, fully hidden at -24vh */
+    margin: -110vh 0vh 0 -5vh; /*Adjust top  margin value to display/hide gold progress bar; 
+                              /*Values: bar + game name fully visible at -110vh, fully hidden at -24vh; game name hidden at -103vh */
     position: absolute;
 
     background: var(--blueDarker);
