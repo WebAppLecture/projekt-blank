@@ -32,6 +32,7 @@ export class TreeRow extends SpriteSquareMovableObject {
     }
 
     draw(ctx, lastRow) {
+        /*
         if(lastRow) {
             ctx.save();
             ctx.globalAlpha = this.transparency; //TODO doesnt work; 
@@ -39,7 +40,9 @@ export class TreeRow extends SpriteSquareMovableObject {
             ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
             ctx.restore();
         }
-        else ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
+        else 
+        */
+        ctx.drawImage(this.img, this.x, this.y, this.drawWidth,  this.drawHeight);
     }
 }
 

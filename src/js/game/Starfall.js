@@ -233,7 +233,7 @@ export class Starfall extends GameTemplate {
         if(this.nextLevel === true) { 
             if(this.level < 3) this.message = ["Well done!"];
             else if(this.level < 5) this.message = ["Great job!"];
-            else this.message = ["!"];
+            else this.message = ["Amazing!"];
             this.message.push("\n", "\n", "Ready for level " + (this.level + 1) + "?", "\n", "\n", "Next Level: Enter");
         }
     }
