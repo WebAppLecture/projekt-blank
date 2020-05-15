@@ -13,7 +13,6 @@ export class Starfall extends GameTemplate {
     //Add snow, jewel, clock
     //Add background images
     //Add lightening (?)
-    //Modify level up messages
 
     start() {
         this.backgroundEngine = new BackgroundEngine(window.imageInitializer); //Create background.
@@ -221,10 +220,10 @@ export class Starfall extends GameTemplate {
     //Message shown between level stages.
     nextLevelMessage() {
         if(this.nextLevel === true) { 
-            if(this.level <= 3) this.message = ["Well done!"];
-            else if(this.level <= 6) this.message = ["Great job!"];
-            else if(this.level >= 8) this.message = ["Master catcher!"];
-            this.message.push(" ", " ", "Ready for level " + (this.level + 1) + "?", " ", "Next Level: Enter");
+            if(this.level < 4) this.message = ["Well done!"];
+            else if(this.level < 7) this.message = ["Great job!"];
+            else this.message = ["Amazing collection!"];
+            this.message.push("\n", "\n", "Ready for level " + (this.level + 1) + "?", "\n", "\n", "Next Level: Enter");
         }
     }
 
@@ -233,15 +232,17 @@ export class Starfall extends GameTemplate {
         if(this.gameOver === true) {
             if(this.voluntaryExit) this.message = ["EXITED GAME"];
             else this.message = ["GAME OVER"];
+
+            this.message.push("\n", "Level: " + this.level, "\n", "\n");
     
             if(this.voluntaryExit) this.message.push("See you again soon!", "\n");
             else {
-                if(this.level > 4) this.message.push("Well done!", "\n"); //Adjust messages
-                else if(this.level > 6) this.message.push("Great job!", "\n");
-                else this.message.push("You can do better ;)", "\n");
+                if(this.level > 3) this.message.push("Well done!", "\n"); 
+                else if(this.level > 5) this.message.push("Great job!", "\n");
+                else if(this.level > 7) this.message = ["Amazing collection!"];
             }
             
-            this.message.push("Level: " + this.level, "\n", "\n", "New Game: Enter")
+            this.message.push("New Game: Enter")
         }
     }
 

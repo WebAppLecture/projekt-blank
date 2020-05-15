@@ -7,14 +7,24 @@ export class Menu {
 
     hide() {
         this.domElement.classList.add("hidden");
-        document.querySelector(".controls").classList.add("hidden"); //Game: Hide menu screen and tutorial.
-        document.querySelector(".sideHeadings").classList.add("hidden"); 
+        this.hideTutorial(); //Hides tutorial along with start menu.
+    }
+
+    hideTutorial() {
+        document.querySelector(".controls").classList.add("hidden"); //Query selector to access HTML element only by class (no id). 
+        document.querySelector(".sideHeadings").classList.add("hidden");
+        document.querySelector(".items").classList.add("hidden");
     }
 
     show() {
-        this.domElement.classList.remove("hidden"); //Starting screen: Show start menu.
+        this.domElement.classList.remove("hidden"); 
+        this.showTutorial(); //Shows tutorial at start menu.
+    }
+
+    showTutorial() {
         document.querySelector(".controls").classList.remove("hidden"); //Show tutorial.
         document.querySelector(".sideHeadings").classList.remove("hidden"); 
+        document.querySelector(".items").classList.remove("hidden"); 
         document.getElementById("progress").style.marginTop = "-110vh"; //Show game name; value see comment in CSS (progress box).
     }
 
