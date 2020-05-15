@@ -120,7 +120,7 @@ export class BackgroundEngine {
     //Called at level up. Speeds up background movement just like player/drop items.
     updateBackgroundStats() {
         this.treeSpeed += 0.4;
-        this.horizonSpeed *= 0.9;
+        this.horizonSpeed *= 0.8;
     }
 
     //Draw sun/moon depending on which is up and tree rows.
