@@ -42,7 +42,7 @@ Als Grundlage habe ich den Code der GameBox übernommen und ihn stellenweise etw
 
 Man merkt vermutlich, dass meine Priorität bei diesem Spiel die grafischen Effekte waren - es hätten noch ein paar DropItems zusätzlich hinzugefügt werden können, was ich zeitlich aber nicht mehr geschafft habe.
 
-Mit der Animation der Baumreihen, der richtigen Positionierung und Bewegung von Sonne und Mond und der Erweiterung um die Farbveränderung des Himmels, wenn die Sonne aufgeht, habe ich vermutlich die meiste Zeit verbracht. Dazu verwende ich zwei Gradienten, die Farben des ersten werden zunächst abhängig vom Himmelskörper und dessen Position verändert und ab einem gewissen Sonnenstand wird der Sonnenaufgangs-Gradient mit dem des blauen Himmels überblendet.
+Mit der Animation der Baumreihen, der richtigen Positionierung und Bewegung von Sonne und Mond und der Farbveränderung des Himmels, wenn die Sonne aufgeht, habe ich vermutlich die meiste Zeit verbracht. Dazu verwende ich zwei Gradienten, die Farben des ersten werden zunächst abhängig vom Himmelskörper und dessen Position verändert und ab einem gewissen Sonnenstand wird der Sonnenaufgangs-Gradient mit dem des blauen Himmels überblendet.
 
 Drop-Items beginnen zu leuchten, wenn sie eingesammelt werden können und werden zum Bildschirmrand hin größer, wodurch ich zusammen mit der Vergrößerung der Baumreihen den Eindruck erwecken wollte, als dass das Glühwürmchen vorwärts fliegt.
 

@@ -258,7 +258,7 @@ export class Starfall extends GameTemplate {
     }
 
     stopGame() {
-        if(this.soundOn()) this.music.finishPlaying();
+        if(this.soundOn()) this.music.stop();
         this.gameOverMessage();
     }
 
