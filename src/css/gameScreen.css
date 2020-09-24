@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    user-select: none;
+    background: var(--blueDarker);
+    overflow: hidden;
+}
+
+.centered {
+    margin: 0 auto;
+}
+
+.hidden {
+    display: none;
+}
+
+.images {
+    display: none;
+}
+
+.game {
+    position: relative;
+    width: 114vh; 
+    height: 85vh;
+    background: transparent;
+}
+
+.outerGlowBox
+{ 
+    width: 114vh;
+    height: 74vh; 
+
+    margin: 0 0 0 0;
+    position: absolute;
+    padding: 1vh;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.outerGlowBox { /*Border around game window, with level progress golden light is revealed*/
+    background: var(--glowBase);
+    box-shadow: 
+                0 0 .9vh .1vh inset var(--glowMax),
+                0 0 .9vh .5vh var(--glowMax),
+
+                0 0 1vh .4vh inset var(--glowBright),
+                0 0 1vh 1vh var(--glowBright),
+
+                0 0 1vh .7vh inset var(--glowMid),
+                0 0 1.5vh 1.6vh var(--glowMid)  
+}
+
+.innerGlowBox
+{ 
+    width: 110vh;
+    height: 70vh; 
+
+    margin: 2vh 0 0 2vh;
+    position: absolute;
+    padding: 1vh;
+}
+
+.innerGlowBox { /*Inner border, same size as screen, used for gold shadows*/
+    background: var(--glowDark);
+    box-shadow: 0 0 1vh .5vh var(--glowMid),
+                0 0 .7vh .3vh var(--glowDark);
+}
+
+.screen { /*Game*/
+    width: 110vh;
+    height: 70vh; 
+
+    margin: 2vh 0 0 2vh;
+    position: absolute;
+
+    background: var(--blueDark);
+    box-shadow: 0 0 3vh .3vh inset var(--blueDarkest),
+                0 0 1vh .1vh var(--blueDarkest);
+}
+
+.progressBox {
+    width: 125vh;
+    height: 100vh; 
+
+    margin: -110vh 0vh 0 -5vh; /*Adjust top  margin value to display/hide gold progress bar; 
+                               /*Values: bar + game name fully visible at -110vh, fully hidden at -24vh; game name hidden at -103vh */
+    position: absolute;
+
+    background: var(--blueDarker);
+    box-shadow: 0 0 .5vh .5vh var(--blueDarker);
+}
+
+.menu {
+    width: fit-content;
+    height: fit-content;
+    max-height: 60vh;
+
+    position: absolute;
+    text-align: center;
+
+    background: transparent;
+    overflow-y: hidden;
+}
+
+.menu > ul {
+    padding-inline-start: 2vh;
+    padding-inline-end: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+
+    font-size: 5vh;
+    font-weight: lighter;
+    font-family: 'Times New Roman', Times, serif;
+    white-space: nowrap;
+    color: white;
+    text-shadow: .05vh .05vh .6vh var(--azure);
+    
+    margin: 25vh 38vh;
+
+    box-shadow: 0 0 1vh .2vh var(--azure),
+                0 0 .5vh .1vh inset white;
+}
+
+.menu > ul.active {
+    border-color: var(--azure);
+    border-radius: 1vh;
+}

@@ -1,0 +1,58 @@
+:root {
+    /* Border */
+    --glowDark: #53390a;
+    --glowBase: #ab6d10;
+    --glowMid: #e68c18;
+    --glowBright: #ffa42c;
+    --glowBrighter: #f3bb72;
+    --glowMax: #ffd59e;
+
+    /* Menu */
+    --azure: #b4b7ce;
+
+    /* Screen */
+    /* DarkBlueHorizon */
+    --blueDarkest: #040120;
+    --blueDarker: #06012a;
+    --blueDark: #1d1847;
+    --blueMidDark: #241c6a;
+
+    /* RisingSunHorizon, not used in CSS styling only here to preview colors for horizon change in js */
+    --blueMid: #281996;
+    --blueMidLight: #3723d3;
+    --blueViolet: #6450ff;
+    --lilaBlassBlau: #8071f0;
+
+    --violet: #dd5ce6;
+    --betweenPink: #e25099;
+    --redPink: #e44273;
+    
+    --orangeStrong: #ff3a08;
+    --orangeLight: #fb6501;
+    --yellowDarkg: #f89500;
+    --yellowBright: #ffb84e;
+
+    /* Final color */
+    --blueBright0: #014c82;
+    --blueBright0: #1776ba;
+    --blueBright0: #1f9df8;
+    --blueBright0: #84c8f8;
+
+    /* Controls */
+    --controlGold0: #7d4a06;
+    --controlGold: #93601d;
+    --controlGold1: #a56c22;
+    --controlGold2: #d58c2e;
+    --controlGold3: #ecaa54;
+    --controlDefaultBackground: #222032;
+
+    /* Items */
+    --orangeStrong: #d54c4c;
+
+    /* Grey Border */
+    --greyDark: #2c2c2c;
+    --greyBase: #393939;
+    --greyMid: #5d5d5d;
+    --greyBright: #848383;
+    --greyMax: #989898;
+}

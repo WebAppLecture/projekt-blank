@@ -1,0 +1,35 @@
+export class ImageInitializer { //Loads all images before game starts to avoid creating new image elements when creating a new instance of an item.
+    constructor() {
+
+        this.numberTreeImages = 1;
+        
+        this.sources = [
+            "src/images/firefly.png", //Player
+            "src/images/star.png", //Star
+            "src/images/allstar.png", //AllStar
+            "src/images/snow.png", //Snow
+            "src/images/moon.png", //Moon
+            "src/images/sun.png", //Sun
+            "src/images/trees.png" //TreeRow
+        ]
+
+        this.idTags = [
+            "fireflyImage", //Player
+            "starImage", //Star
+            "allStarImage", //AllStar
+            "snowImage", //Snow
+            "moonImage", //Moon
+            "sunImage", //Sun
+            "treeRowImage0" //TreeRow
+        ]
+
+        let imageClass = document.getElementById("images"); //Class where image elements will be created.
+
+        for(let i = 0; i < this.sources.length; i++) {
+            let image = document.createElement("img"); //Create element.
+            image.src = this.sources[i]; //Assign source path.
+            image.id = this.idTags[i]; //Set id to be able to get the image for draw methods.
+            imageClass.appendChild(image); //Add image to class "images" in the HTML.
+        }
+    }
+}

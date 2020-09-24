@@ -1,0 +1,36 @@
+.items {
+    position: absolute;
+    cursor: pointer;
+    left: 133.7vh;
+    margin-top: 7vh;
+}
+
+.items > * {
+    width: 7vh;
+    height: 7vh;
+
+    margin-top: 5vh;
+    
+    border-radius: 5vh;
+}
+
+
+.star {
+    background: url("../images/star.png"), radial-gradient(rgb(250, 201, 94, 1), rgb(250, 201, 94, 0.5), var(--blueDarker), var(--blueDarker));
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 5vh 5vh, 5vh 5vh;
+}
+
+.allstar {
+    background: url("../images/allstar.png"), radial-gradient(rgb(206, 71, 80, 1), rgb(206, 71, 80, 0.5), var(--blueDarker), var(--blueDarker));
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 5vh 5vh, 5vh 5vh;}
+
+.snow {
+    background: url("../images/snow.png"), radial-gradient(rgb(255, 255, 255, 1), rgb(255, 255, 255, 0.5), var(--blueDarker), var(--blueDarker));
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 4.5vh 4.5vh, 5vh 5vh;
+}

@@ -1,0 +1,143 @@
+.controls {
+    position: absolute;
+    left: -26.5vh;
+    margin-top: 12vh;
+    cursor: pointer;
+    font-family: 'Cambria', serif;
+    font-weight: normal;
+}
+
+.controls > * {
+    width: 7vh;
+    height: 7vh;
+      
+    border-radius: 1vh;
+    border-style: solid;
+    border-color: var(--controlGold1);
+    box-shadow: 
+        0 0 1vh .5vh var(--controlGold),
+        0 0 .5vh .1vh inset var(--controlGold2), 
+        0 0 0.1vh .3vh inset var(--controlGold2);
+    
+    color: var(--glowMax);
+    background-color: var(--blueDarker);
+
+    line-height: 6vh;
+    text-align: center;
+    font-size: 3vh;
+}
+
+.down {
+    margin-top: 2vh ;
+}
+
+.left {
+    margin-left: -9.5vh;
+    margin-top: -16vh;
+}
+
+.right {
+    margin-left: 9.5vh;
+    margin-top: 2vh;
+}
+
+.confirm {
+    width: 20vh;
+    margin-left: -7vh;
+    margin-top: 14vh;
+}
+
+.quit {
+    width: 20vh;
+    margin-left: -7vh;
+    margin-top: 3vh;
+}
+
+.music {
+    border-radius: 5vh;
+    margin-top: 5vh;
+}
+
+.confirm:active,
+.quit:active,
+.music.active, /* Music button stays pressed when clicked -> class, see JS */
+.up:active,
+.down:active,
+.left:active,
+.right:active {
+    color: rgb(255, 238, 205);
+    text-shadow: 0 0 0.4vh rgb(251, 226, 178);
+    
+    box-shadow: 
+    0 0 .3vh .2vh inset var(--glowBrighter), 
+    0 0 2vh .3vh var(--controlGold),
+    0 0 1.1vh .05vh var(--controlGold2),
+    0 0 .5vh .1vh inset var(--controlGold2), 
+    0 0 .7vh .3vh inset var(--controlGold3), 
+    0 0 0.1vh .3vh inset var(--controlGold2);
+} 
+
+.confirm:hover,
+.quit:hover {
+    background-image: 
+    linear-gradient(90deg, 
+    var(--controlGold), 
+    var(--controlGold2),
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold)
+    );
+}
+
+.up:hover {
+    background-image: 
+    linear-gradient(0deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.down:hover {
+    background-image: 
+    linear-gradient(180deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.right:hover {
+    background-image: 
+    linear-gradient(90deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.left:hover {
+    background-image: 
+    linear-gradient(270deg, 
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold1)
+    );
+}
+
+.music:hover,
+.music.active {
+    color: rgb(255, 238, 205);
+    text-shadow: 0 0 0.4vh rgb(251, 226, 178);
+
+
+    background-image:
+    linear-gradient(90deg, 
+    var(--controlGold), 
+    var(--controlGold2),
+    var(--controlGold3),
+    var(--controlGold3),
+    var(--controlGold2),
+    var(--controlGold)
+    );
+}
